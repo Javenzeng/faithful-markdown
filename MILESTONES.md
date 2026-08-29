@@ -2,18 +2,18 @@
 
 ## Status Model
 
-每个里程碑使用两个独立维度：
+每个 milestone 使用两个独立维度：
 
 - Direction: `APPROVED | PENDING | CONDITIONAL`
 - Execution: `NOT_STARTED | IN_PROGRESS | BLOCKED | READY_FOR_REVIEW | ACCEPTED`
 
-`APPROVED` 只代表方向通过，不代表已经授权修改源码。实际执行授权以 `PROJECT_STATE.md` 与 Human 当前明确指令为准。
+`APPROVED` 只代表方向通过，不等于已经授权修改源码。实际 execution authorization 以 `PROJECT_STATE.md` 与 Human 当前明确指令为准。
 
 ---
 
 ## V2 — Editor Baseline
 
-**Direction: APPROVED**  
+**Direction: APPROVED**
 **Execution: ACCEPTED**
 
 目标：从只读浏览器升级为轻量、离线、可编辑、可保存的 Windows Markdown Reader & Editor。
@@ -30,111 +30,124 @@
 - 未保存状态与关闭确认
 - Windows EXE 封装
 - 无参数启动 bridge 重入死锁根因修复
-- Human 实机启动确认：最终 EXE 未再发生启动锁死
+- Human 实机启动确认
 
-V2 是后续版本的 accepted Windows baseline。
+V2 是历史 accepted Windows binary baseline。
 
 ---
 
 ## V2.1 — Content Fidelity Contract
 
-**Direction: APPROVED**  
+**Direction: APPROVED**
 **Execution: ACCEPTED**
 
-目标：让“不会弄脏 Markdown 文件”从工程倾向变成可测试、可证明的内容保真契约。
+目标：让“不会弄脏 Markdown 文件”成为可测试、可证明的内容保真契约。
 
-范围只包含：
+Accepted scope：
 
 1. **No-op Save**
    - 内容未变时不写磁盘
    - `Open -> Save` SHA-256 保持一致
 
 2. **External Change Guard**
-   - 保存前检查磁盘文件是否已被外部修改
+   - 保存前检查磁盘文件是否被外部修改
    - 检测到变化时禁止 silent overwrite
-   - 优先单一 authoritative fingerprint，避免增加同步状态源
 
 3. **Minimal Safe Save**
-   - 确实需要写入时，不采用容易留下截断原文件的粗暴路径
-   - 写入失败必须明确失败，不假装成功
+   - 需要写入时使用 same-directory temp + replace 路径
+   - 写入失败明确失败
    - 不引入自研持久化框架
-   - V2.1 不研究完整 Windows filesystem metadata fidelity；深层 replace / fsync / ACL 语义留给 V2.2
 
 4. **Read-only Upfront**
-   - 打开时即识别明显只读 / 不可写状态
-   - 不允许用户编辑很久后才发现无法保存
+   - 打开时识别明显只读 / 不可写状态
 
 5. **File Facts**
-   - 状态栏只显示必要、可验证的文件事实：encoding / BOM / EOL / Clean|Modified / Read Only 等
+   - encoding / BOM / EOL / Clean|Modified / Read Only
 
 6. **Fidelity Test Corpus**
-   - UTF-8、BOM、LF、CRLF、尾部换行、Unicode、emoji、mixed-EOL 等 fixture
-   - No-op、small-edit、external-change 形成回归测试
-   - mixed-EOL 在 V2.1 只承诺 **no-op save byte-identical**；编辑后的逐处 mixed-EOL 保留不在本里程碑承诺
+   - UTF-8、BOM、LF、CRLF、Unicode、emoji、mixed-EOL 等 fixture
+   - mixed-EOL 在 V2.1 只承诺 no-op byte-identical
 
-### Windows Real-Machine Acceptance Status
+Acceptance:
+- source tests: **24/24 PASS**
+- Windows Real-Machine Acceptance: **H1–H7 PASS**
+- P0 Cold Start/API Exposure Fix: **ACCEPTED**
+- accepted source baseline: **YES**
 
-- Unit-level source implementation: **PASS**.
-- Windows Real-Machine Acceptance: **PASS**.
-- H1 Cold Start Retest: **PASS 5/5**.
-- H2 File Facts + Edit/Save: **PASS**.
-- H3 No-op Save: **PASS** — unchanged save preserved SHA-256 and LastWriteTime.
-- H4 External Change Guard: **PASS**.
-- H5 Windows Read-only + Save As: **PASS**.
-- H6 UTF-8 BOM + CRLF: **PASS**.
-- H7 Dirty Close / Lifecycle: **PASS**.
-- P0 Cold Start/API Exposure Fix: **ACCEPTED**.
-- V2.1 accepted source baseline: **YES**.
-- Blocker: **None**.
-- Packaging: **NOT_AUTHORIZED**.
-- Next Gate: **GitHub Repository Initialization**.
+### GitHub Initial Import
 
-### V2.1 Acceptance Gate
+**Status: ACCEPTED / CLOSED — 2026-08-30**
 
-必须证明：
-- No-op save 不改变 SHA-256
-- 外部修改不会被静默覆盖
-- UTF-8/BOM/文件级 EOL 现有保证不退化
-- Minimal Safe Save 不引入明显临时残留或无意义内容 churn
-- 只读行为明确
-- 核心行为有自动回归测试
-- 不新增大型运行时依赖
-- 不新增后台 watcher / daemon
-- 不新增产品功能型 UI
-- 运行时代码增长必须有测试与不变量证明其必要性
+Repository: `Javenzeng/faithful-markdown`
+Default branch: `main`
+Accepted root import commit:
+
+`fab1072af42f78b758b425a61ce2173df39a79fd`
+
+GitHub 已成为 canonical source + durable governance + Git history。
+
+Fresh-session GitHub Capability Probe: **PASS**.
+
+Evidence:
+- `records/GitHub/GITHUB_INITIAL_IMPORT_ACCEPTANCE_AND_CAPABILITY_PROBE_2026-08-30.md`
+
+**Next Gate: V2.2 Design / Evidence / Change Boundary Review**
 
 ---
 
 ## V2.2 — Filesystem Save Integrity
 
-**Direction: PENDING**  
+**Direction: PENDING**
 **Execution: NOT_STARTED**
 
-目标：在不增加用户功能的前提下，研究并强化 Windows 文件系统层保存可靠性。
+目标：在不增加用户功能的前提下，以真实 Windows 证据研究并强化文件系统层保存可靠性。
 
 候选研究项：
-- flush / fsync / replace 语义
-- Windows 文件属性与 ACL 保留
+- temp write flush / fsync / replace 语义
+- Windows file attributes 与 ACL 在 replace 后的真实行为
 - file lock
 - 保存过程中权限变化
-- 同步盘与网络盘边界
 - 删除 / 替换 race
 - safe failure semantics
-- metadata / Alternate Data Streams 等是否需要保证
+- sync / network boundary 是否值得支持
+- Alternate Data Streams 等 metadata 是否需要保证
 
-原则：只有真实测试、故障或采用需求支持的项才进入实现。
+原则：
+- 先测事实，再决定是否实现。
+- 只有真实故障、测试证据或明确采用需求支持的项才进入 runtime。
+- 不建立 ACL/ADS 复制框架。
+- 不引入后台 watcher / daemon。
+- 不用 retry / timeout / fallback 掩盖系统边界。
+- residual TOCTOU 能诚实声明边界时，不为追求理论完美引入复杂 architecture。
+
+### V2.2 Current Gate
+
+**Design / Evidence / Change Boundary Review only.**
+
+当前允许：
+- 阅读现有 save implementation 与 V2.1 tests
+- 设计 Windows failure matrix
+- 区分“应测试”与“应实现”
+- 提出最小 design proposal
+
+当前不允许：
+- 修改业务源码
+- 修改 build script
+- packaging / release
+
+Human 批准 design + Change Boundary 后，才进入 implementation authorization。
 
 ---
 
 ## V2.3 — Fidelity Edge Cases
 
-**Direction: PENDING**  
+**Direction: PENDING**
 **Execution: NOT_STARTED**
 
 目标：主要扩测试矩阵，少量修复真实边缘问题。
 
 重点覆盖：
-- mixed-EOL **发生编辑后的**行为
+- mixed-EOL 发生编辑后的行为
 - final / no-final newline
 - CJK / emoji / combining characters
 - 空文件 / 极短文件
@@ -149,7 +162,7 @@ V2 是后续版本的 accepted Windows baseline。
 
 ## V2.4 — External State Integrity
 
-**Direction: PENDING**  
+**Direction: PENDING**
 **Execution: NOT_STARTED**
 
 目标：强化 Agent / IDE / sync 工具并发环境下的确定行为。
@@ -167,7 +180,7 @@ V2 是后续版本的 accepted Windows baseline。
 
 ## V2.5 — Large-File Discipline
 
-**Direction: CONDITIONAL**  
+**Direction: CONDITIONAL**
 **Execution: NOT_STARTED**
 
 仅在真实用户或测试证明大文件成为问题时启动。
@@ -180,7 +193,7 @@ V2 是后续版本的 accepted Windows baseline。
 
 ## V2.6 — Reproducible Release
 
-**Direction: PENDING**  
+**Direction: PENDING**
 **Execution: NOT_STARTED**
 
 目标：提高 release 可验证性与开源可信度。
@@ -192,13 +205,13 @@ V2 是后续版本的 accepted Windows baseline。
 - Fidelity Test result
 - 可重复或至少可审计的 Windows 构建流程
 
-正式 GitHub release 与 OpenAI 开源支持申请应以这一阶段的可审计产物为基础。
+正式 GitHub Release 应以这一阶段的可审计产物为基础。
 
 ---
 
 ## V3 — Architecture Reduction
 
-**Direction: CONDITIONAL**  
+**Direction: CONDITIONAL**
 **Execution: NOT_STARTED**
 
 V3 不是功能升级。
