@@ -193,6 +193,48 @@ class FidelityTests(unittest.TestCase):
             store.save(content)
             self.assertEqual(path.read_bytes(), before)
 
+    def test_edited_mixed_eol_follows_selected_file_level_policy(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self.copy_fixture(tmp, "mixed_eol.md.bin")
+            store = DocumentStore()
+            store.load(path)
+            selected_eol = store.line_ending
+            content = "# Changed\n\nline one\nline two\n"
+            store.save(content)
+            expected = content.replace("\n", selected_eol).encode("utf-8")
+            self.assertEqual(path.read_bytes(), expected)
+
+    def test_edited_final_newline_behavior(self):
+        cases = (
+            ("utf8_lf.md.bin", "# Changed\n", b"# Changed\n"),
+            ("utf8_no_final_newline.md.bin", "# Changed", b"# Changed"),
+        )
+        for fixture, content, expected in cases:
+            with self.subTest(fixture=fixture), tempfile.TemporaryDirectory() as tmp:
+                path = self.copy_fixture(tmp, fixture)
+                store = DocumentStore()
+                store.load(path)
+                store.save(content)
+                self.assertEqual(path.read_bytes(), expected)
+
+    def test_edited_unicode_emoji_and_combining_sequences_are_preserved(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self.copy_fixture(tmp, "unicode_emoji.md.bin")
+            store = DocumentStore()
+            store.load(path)
+            content = "Cafe\u0301 — 中文 😀\n"
+            store.save(content)
+            self.assertEqual(path.read_bytes(), content.encode("utf-8"))
+
+    def test_empty_and_one_char_fidelity(self):
+        for content in ("", "x"):
+            with self.subTest(content=content), tempfile.TemporaryDirectory() as tmp:
+                path = self.copy_fixture(tmp, "utf8_lf.md.bin")
+                store = DocumentStore()
+                store.load(path)
+                store.save(content)
+                self.assertEqual(path.read_bytes(), content.encode("utf-8"))
+
     def test_read_only_fact_is_upfront_and_unchanged_save_is_noop(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = self.copy_fixture(tmp, "utf8_lf.md.bin")
