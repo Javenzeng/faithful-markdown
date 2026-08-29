@@ -109,22 +109,13 @@ Next Gate: **V2.3 — Fidelity Edge Cases: Scope / Test Matrix Review**
 
 ## V2.3 — Fidelity Edge Cases
 
-**Direction: PENDING**
-**Execution: NOT_STARTED**
+**Direction: APPROVED**
+**Execution: ACCEPTED**
+**Outcome: TEST_ONLY**
 
-目标：主要扩测试矩阵，少量修复真实边缘问题。
+fidelity test-only coverage added：mixed-EOL edited behavior follows current file-level EOL policy；final/no-final newline；CJK / emoji / decomposed combining sequences；empty / 1-char。runtime LOC +0，dependency +0，state +0，abstraction +0；no runtime defect found。accepted source baseline remains V2.1。
 
-重点覆盖：
-- mixed-EOL 发生编辑后的行为
-- final / no-final newline
-- CJK / emoji / combining characters
-- 空文件 / 极短文件
-- 超长单行
-- 中文与特殊字符路径
-- 深层路径
-- 相对图片路径边界
-
-理想演进比例：测试代码增长显著高于运行时代码增长。
+Next Gate: **V2.4 — External State Integrity: Scope / Evidence Review**
 
 ---
 

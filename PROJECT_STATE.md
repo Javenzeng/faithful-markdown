@@ -7,10 +7,10 @@ Repository: `Javenzeng/faithful-markdown`
 Default branch: `main`
 Canonical source + durable governance: GitHub
 Accepted source baseline: **V2.1 — Content Fidelity Contract**
-Current milestone: **V2.3 — Fidelity Edge Cases**
-V2.3 Direction: `PENDING`
-V2.3 Execution: `NOT_STARTED`
-V2.3 source implementation authorization: `NOT_GRANTED`
+Current milestone: **V2.4 — External State Integrity**
+V2.4 Direction: `PENDING`
+V2.4 Execution: `NOT_STARTED`
+V2.4 source implementation authorization: `NOT_GRANTED`
 Current owner: Human
 Baton: `HUMAN`
 Blocker: `None`
@@ -18,9 +18,9 @@ Packaging: `NOT_AUTHORIZED`
 
 ## Last Accepted Fact
 
-2026-08-30：V2.2 Human Acceptance — **ACCEPTED / NO_CHANGE**。
+2026-08-30：V2.3 Human Acceptance — **ACCEPTED / TEST_ONLY**。
 
-Windows 11 `10.0.26200`、local NTFS evidence 1–4 全部 PASS；无 temp residue、target corruption 或 state corruption。无 source/test 修改，accepted source baseline 仍为 V2.1 — Content Fidelity Contract。
+4 个高价值 fidelity edge areas 已测试覆盖：mixed-EOL edited behavior follows current file-level EOL policy；final/no-final newline edited behavior；CJK、emoji 与 decomposed combining sequence preservation；empty / 1-char。无 runtime bug evidence；无 runtime、fixture、dependency、state 或 abstraction 增长。accepted source baseline 仍为 V2.1 — Content Fidelity Contract。
 
 After this accepted public push:
 - GitHub = canonical source + durable governance + Git history.
@@ -128,12 +128,12 @@ Evidence:
 
 ## Current Authorization Boundary
 
-只允许进入 V2.3 Scope / Test Matrix Review。
+只允许进入 V2.4 Scope / Evidence Review。
 
-**NO V2.3 SOURCE MODIFICATION.**
+**NO V2.4 SOURCE MODIFICATION.**
 
 ## Next Gate
 
-**V2.3 — Fidelity Edge Cases: Scope / Test Matrix Review**
+**V2.4 — External State Integrity: Scope / Evidence Review**
 
 Baton: `HUMAN`
