@@ -197,43 +197,85 @@ class FidelityTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path = self.copy_fixture(tmp, "mixed_eol.md.bin")
             store = DocumentStore()
-            store.load(path)
+            state = store.load(path)
+            self.assertEqual(state["eol_kind"], "MIXED")
             selected_eol = store.line_ending
-            content = "# Changed\n\nline one\nline two\n"
-            store.save(content)
-            expected = content.replace("\n", selected_eol).encode("utf-8")
-            self.assertEqual(path.read_bytes(), expected)
+            edited = state["content"].replace("b", "B")
+            saved = store.save(edited)
+            self.assertEqual(saved["content"], edited)
+            raw = path.read_bytes()
+            self.assertFalse(raw.startswith(b"\xef\xbb\xbf"))
+            logical_text = raw.decode("utf-8")
+            expected_text = edited.replace("\r\n", "\n").replace("\r", "\n").replace("\n", selected_eol)
+            self.assertEqual(logical_text, expected_text)
+            expected_eol_kind = {"\r\n": "CRLF", "\n": "LF", "\r": "CR"}[selected_eol]
+            self.assertEqual(store.eol_kind, expected_eol_kind)
 
     def test_edited_final_newline_behavior(self):
-        cases = (
-            ("utf8_lf.md.bin", "# Changed\n", b"# Changed\n"),
-            ("utf8_no_final_newline.md.bin", "# Changed", b"# Changed"),
-        )
-        for fixture, content, expected in cases:
-            with self.subTest(fixture=fixture), tempfile.TemporaryDirectory() as tmp:
-                path = self.copy_fixture(tmp, fixture)
-                store = DocumentStore()
-                store.load(path)
-                store.save(content)
-                self.assertEqual(path.read_bytes(), expected)
+        with tempfile.TemporaryDirectory() as tmp:
+            final_path = self.copy_fixture(tmp, "utf8_lf.md.bin", "final.md")
+            final_store = DocumentStore()
+            final_state = final_store.load(final_path)
+            final_edited = final_state["content"].replace("line", "edited")
+            final_store.save(final_edited)
+            self.assertEqual(final_path.read_bytes(), final_edited.encode("utf-8"))
+            self.assertTrue(final_path.read_bytes().endswith(b"\n"))
+
+            no_final_path = self.copy_fixture(tmp, "utf8_no_final_newline.md.bin", "no-final.md")
+            no_final_store = DocumentStore()
+            no_final_state = no_final_store.load(no_final_path)
+            no_final_edited = no_final_state["content"].replace("beta", "edited")
+            no_final_store.save(no_final_edited)
+            self.assertEqual(no_final_path.read_bytes(), no_final_edited.encode("utf-8"))
+            self.assertFalse(no_final_path.read_bytes().endswith(b"\n"))
+
+            added_path = self.copy_fixture(tmp, "utf8_no_final_newline.md.bin", "added.md")
+            added_store = DocumentStore()
+            added_content = added_store.load(added_path)["content"] + "\n"
+            added_store.save(added_content)
+            self.assertEqual(added_path.read_bytes(), added_content.encode("utf-8"))
+            self.assertTrue(added_path.read_bytes().endswith(b"\n"))
+
+            removed_path = self.copy_fixture(tmp, "utf8_lf.md.bin", "removed.md")
+            removed_store = DocumentStore()
+            removed_content = removed_store.load(removed_path)["content"].rstrip("\r\n")
+            removed_store.save(removed_content)
+            self.assertEqual(removed_path.read_bytes(), removed_content.encode("utf-8"))
+            self.assertFalse(removed_path.read_bytes().endswith(b"\n"))
 
     def test_edited_unicode_emoji_and_combining_sequences_are_preserved(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = self.copy_fixture(tmp, "unicode_emoji.md.bin")
             store = DocumentStore()
-            store.load(path)
-            content = "Cafe\u0301 — 中文 😀\n"
-            store.save(content)
-            self.assertEqual(path.read_bytes(), content.encode("utf-8"))
+            state = store.load(path)
+            edited = state["content"] + "edited\n"
+            saved = store.save(edited)
+            self.assertEqual(saved["content"], edited)
+            self.assertFalse(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            logical_text = path.read_bytes().decode("utf-8")
+            self.assertIn("中文", logical_text)
+            self.assertIn("🙂", logical_text)
+            self.assertIn("Cafe\u0301", logical_text)
+            self.assertNotIn("Café", logical_text)
+            self.assertEqual(logical_text, edited)
 
     def test_empty_and_one_char_fidelity(self):
-        for content in ("", "x"):
-            with self.subTest(content=content), tempfile.TemporaryDirectory() as tmp:
-                path = self.copy_fixture(tmp, "utf8_lf.md.bin")
-                store = DocumentStore()
-                store.load(path)
-                store.save(content)
-                self.assertEqual(path.read_bytes(), content.encode("utf-8"))
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "empty.md"
+            path.write_bytes(b"")
+            store = DocumentStore()
+            state = store.load(path)
+            self.assertEqual(state["eol_kind"], "NONE")
+            with patch.object(store, "_safe_write", wraps=store._safe_write) as safe_write:
+                saved = store.save(state["content"])
+            self.assertEqual(saved["content"], "")
+            self.assertEqual(safe_write.call_count, 0)
+            self.assertEqual(path.read_bytes(), b"")
+
+            store.save("x")
+            self.assertEqual(path.read_bytes(), b"x")
+            store.save("")
+            self.assertEqual(path.read_bytes(), b"")
 
     def test_read_only_fact_is_upfront_and_unchanged_save_is_noop(self):
         with tempfile.TemporaryDirectory() as tmp:
