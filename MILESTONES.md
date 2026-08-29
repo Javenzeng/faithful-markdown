@@ -97,45 +97,13 @@ Evidence:
 
 ## V2.2 — Filesystem Save Integrity
 
-**Direction: PENDING**
-**Execution: NOT_STARTED**
+**Direction: APPROVED**
+**Execution: ACCEPTED**
+**Outcome: NO_CHANGE**
 
-目标：在不增加用户功能的前提下，以真实 Windows 证据研究并强化文件系统层保存可靠性。
+Windows local NTFS evidence 1–4 PASS。无 temp residue、target corruption 或 state corruption；无 runtime change justified。runtime LOC +0，dependency +0，state +0，abstraction +0；accepted source baseline remains V2.1 — Content Fidelity Contract。
 
-候选研究项：
-- temp write flush / fsync / replace 语义
-- Windows file attributes 与 ACL 在 replace 后的真实行为
-- file lock
-- 保存过程中权限变化
-- 删除 / 替换 race
-- safe failure semantics
-- sync / network boundary 是否值得支持
-- Alternate Data Streams 等 metadata 是否需要保证
-
-原则：
-- 先测事实，再决定是否实现。
-- 只有真实故障、测试证据或明确采用需求支持的项才进入 runtime。
-- 不建立 ACL/ADS 复制框架。
-- 不引入后台 watcher / daemon。
-- 不用 retry / timeout / fallback 掩盖系统边界。
-- residual TOCTOU 能诚实声明边界时，不为追求理论完美引入复杂 architecture。
-
-### V2.2 Current Gate
-
-**Design / Evidence / Change Boundary Review only.**
-
-当前允许：
-- 阅读现有 save implementation 与 V2.1 tests
-- 设计 Windows failure matrix
-- 区分“应测试”与“应实现”
-- 提出最小 design proposal
-
-当前不允许：
-- 修改业务源码
-- 修改 build script
-- packaging / release
-
-Human 批准 design + Change Boundary 后，才进入 implementation authorization。
+Next Gate: **V2.3 — Fidelity Edge Cases: Scope / Test Matrix Review**
 
 ---
 

@@ -7,10 +7,10 @@ Repository: `Javenzeng/faithful-markdown`
 Default branch: `main`
 Canonical source + durable governance: GitHub
 Accepted source baseline: **V2.1 — Content Fidelity Contract**
-Current milestone: **V2.2 — Filesystem Save Integrity**
-Direction: `PENDING`
-Execution: `NOT_STARTED`
-V2.2 source implementation authorization: `NOT_GRANTED`
+Current milestone: **V2.3 — Fidelity Edge Cases**
+V2.3 Direction: `PENDING`
+V2.3 Execution: `NOT_STARTED`
+V2.3 source implementation authorization: `NOT_GRANTED`
 Current owner: Human
 Baton: `HUMAN`
 Blocker: `None`
@@ -18,27 +18,9 @@ Packaging: `NOT_AUTHORIZED`
 
 ## Last Accepted Fact
 
-2026-08-30：GitHub Initial Import 已完成 public readback 并由 Human 收尾授权确认。
+2026-08-30：V2.2 Human Acceptance — **ACCEPTED / NO_CHANGE**。
 
-Accepted initial-import anchor:
-
-`fab1072af42f78b758b425a61ce2173df39a79fd`
-
-Commit subject:
-
-`Initial repository import: accepted V2.1 source baseline and pre-Git project records`
-
-Readback facts:
-- repository: `Javenzeng/faithful-markdown`
-- visibility: `public`
-- default branch: `main`
-- initial public `main` HEAD: exact accepted root commit above
-- root commit parents: `0`
-- V2.1 source baseline / tests / public governance present
-- raw fidelity fixture `.gitattributes` protection present
-- public binary excluded from Git history
-
-GitHub Initial Import: **ACCEPTED / CLOSED**.
+Windows 11 `10.0.26200`、local NTFS evidence 1–4 全部 PASS；无 temp residue、target corruption 或 state corruption。无 source/test 修改，accepted source baseline 仍为 V2.1 — Content Fidelity Contract。
 
 After this accepted public push:
 - GitHub = canonical source + durable governance + Git history.
@@ -146,31 +128,12 @@ Evidence:
 
 ## Current Authorization Boundary
 
-本轮授权仅覆盖：
-- GitHub Initial Import governance closeout
-- Manager / Reviewer + GitHub Capability Probe 治理升级
-- durable governance / records 同步
+只允许进入 V2.3 Scope / Test Matrix Review。
 
-本轮未授权：
-- V2.2 业务源码修改
-- 新的 V2.2 implementation tests
-- `build_windows.ps1` 修改
-- packaging
-- GitHub Release
-- 产品 scope expansion
+**NO V2.3 SOURCE MODIFICATION.**
 
 ## Next Gate
 
-**V2.2 — Filesystem Save Integrity: Design / Evidence / Change Boundary Review**
-
-当前只允许：
-- 读取 V2.1 save implementation / tests
-- 设计 Windows real-machine failure matrix
-- 确认 filesystem metadata / replace / lock / permission-change 的真实行为
-- 形成最小 V2.2 design proposal
-
-在 Human 明确批准 V2.2 design 与 Change Boundary 前：
-
-**NO SOURCE MODIFICATION.**
+**V2.3 — Fidelity Edge Cases: Scope / Test Matrix Review**
 
 Baton: `HUMAN`
