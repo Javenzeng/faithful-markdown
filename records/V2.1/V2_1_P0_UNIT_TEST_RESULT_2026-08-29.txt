@@ -1,0 +1,29 @@
+test_bind_window_keeps_reference_private (test_app_api_surface.EditorAPISurfaceTests.test_bind_window_keeps_reference_private) ... ok
+test_public_method_surface_did_not_expand (test_app_api_surface.EditorAPISurfaceTests.test_public_method_surface_did_not_expand) ... ok
+test_window_reference_is_private (test_app_api_surface.EditorAPISurfaceTests.test_window_reference_is_private) ... ok
+test_crlf_is_preserved_on_normal_save (test_core.DocumentStoreTests.test_crlf_is_preserved_on_normal_save) ... ok
+test_non_utf8_is_rejected (test_core.DocumentStoreTests.test_non_utf8_is_rejected) ... ok
+test_save_as_adds_md_extension (test_core.DocumentStoreTests.test_save_as_adds_md_extension) ... ok
+test_utf8_bom_is_preserved_on_normal_save (test_core.DocumentStoreTests.test_utf8_bom_is_preserved_on_normal_save) ... ok
+test_utf8_roundtrip (test_core.DocumentStoreTests.test_utf8_roundtrip) ... ok
+test_harmful_link_is_neutralized (test_core.RenderingTests.test_harmful_link_is_neutralized) ... ok
+test_raw_html_is_escaped (test_core.RenderingTests.test_raw_html_is_escaped) ... ok
+test_relative_image_is_inlined (test_core.RenderingTests.test_relative_image_is_inlined) ... ok
+test_external_modification_is_blocked_even_for_clean_editor (test_fidelity.FidelityTests.test_external_modification_is_blocked_even_for_clean_editor) ... ok
+test_file_facts_and_eol_kind (test_fidelity.FidelityTests.test_file_facts_and_eol_kind) ... ok
+test_final_and_no_final_newline_noop_fidelity (test_fidelity.FidelityTests.test_final_and_no_final_newline_noop_fidelity) ... ok
+test_mixed_eol_noop_is_byte_identical (test_fidelity.FidelityTests.test_mixed_eol_noop_is_byte_identical) ... ok
+test_modified_save_preserves_bom_and_file_level_crlf (test_fidelity.FidelityTests.test_modified_save_preserves_bom_and_file_level_crlf) ... ok
+test_modified_save_preserves_lf_policy (test_fidelity.FidelityTests.test_modified_save_preserves_lf_policy) ... ok
+test_noop_save_is_byte_identical_and_skips_safe_write (test_fidelity.FidelityTests.test_noop_save_is_byte_identical_and_skips_safe_write) ... ok
+test_os_replace_failure_preserves_target_and_cleans_temp (test_fidelity.FidelityTests.test_os_replace_failure_preserves_target_and_cleans_temp) ... ok
+test_read_only_fact_is_upfront_and_unchanged_save_is_noop (test_fidelity.FidelityTests.test_read_only_fact_is_upfront_and_unchanged_save_is_noop) ... ok
+test_save_as_same_path_delegates_to_normal_guard (test_fidelity.FidelityTests.test_save_as_same_path_delegates_to_normal_guard) ... ok
+test_save_as_target_races_are_blocked_and_temp_cleaned (test_fidelity.FidelityTests.test_save_as_target_races_are_blocked_and_temp_cleaned) ... ok
+test_second_fingerprint_conflict_preserves_target_and_cleans_temp (test_fidelity.FidelityTests.test_second_fingerprint_conflict_preserves_target_and_cleans_temp) ... ok
+test_unicode_and_emoji_noop_fidelity (test_fidelity.FidelityTests.test_unicode_and_emoji_noop_fidelity) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.016s
+
+OK

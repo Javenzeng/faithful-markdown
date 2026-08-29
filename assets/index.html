@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Markdown Reader & Editor</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f9;
+      --panel: #ffffff;
+      --line: #e5e7eb;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --accent-soft: #eff6ff;
+      --danger: #b91c1c;
+      --code-bg: #f6f8fa;
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    button {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 7px 12px;
+      cursor: pointer;
+      font: inherit;
+    }
+    button:hover { background: #f9fafb; }
+    button.primary { background: var(--accent); border-color: var(--accent); color: white; }
+    button.mode.active { background: var(--accent-soft); border-color: #bfdbfe; color: #1d4ed8; }
+    #app { display: grid; grid-template-rows: 52px 1fr 28px; height: 100%; }
+    #toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+    }
+    .separator { width: 1px; height: 24px; background: var(--line); margin: 0 4px; }
+    #fileName {
+      margin-left: auto;
+      max-width: 38vw;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      color: var(--muted);
+    }
+    #workspace { min-height: 0; display: grid; grid-template-columns: 1fr 1fr; }
+    #editorPane, #previewPane { min-width: 0; min-height: 0; background: var(--panel); }
+    #editorPane { border-right: 1px solid var(--line); }
+    #editor {
+      width: 100%; height: 100%; resize: none; border: 0; outline: 0;
+      padding: 24px 26px 48px;
+      background: #fbfcfe; color: #111827;
+      font: 14px/1.65 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      tab-size: 4;
+    }
+    #previewPane { overflow: auto; }
+    #preview {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 34px 46px 80px;
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+    #preview h1, #preview h2, #preview h3, #preview h4 { line-height: 1.3; margin: 1.4em 0 .7em; }
+    #preview h1, #preview h2 { border-bottom: 1px solid var(--line); padding-bottom: .3em; }
+    #preview h1 { font-size: 2em; }
+    #preview h2 { font-size: 1.5em; }
+    #preview h3 { font-size: 1.25em; }
+    #preview p, #preview ul, #preview ol, #preview blockquote, #preview table, #preview pre { margin: 0 0 1em; }
+    #preview a { color: #0969da; text-decoration: none; }
+    #preview a:hover { text-decoration: underline; }
+    #preview blockquote { margin-left: 0; padding: .2em 1em; color: #57606a; border-left: .25em solid #d0d7de; }
+    #preview code { background: var(--code-bg); border-radius: 5px; padding: .15em .35em; font-size: 85%; }
+    #preview pre { overflow: auto; background: var(--code-bg); border-radius: 8px; padding: 16px; }
+    #preview pre code { padding: 0; background: transparent; }
+    #preview table { border-collapse: collapse; width: 100%; display: block; overflow-x: auto; }
+    #preview th, #preview td { border: 1px solid #d0d7de; padding: 6px 13px; }
+    #preview tr:nth-child(2n) { background: #f6f8fa; }
+    #preview img { display: block; max-width: 100%; height: auto; margin: 20px auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,.12); }
+    #preview input[type="checkbox"] { margin-right: .5em; }
+    #statusbar {
+      display: flex; align-items: center; gap: 10px; padding: 0 12px;
+      border-top: 1px solid var(--line); background: var(--panel); color: var(--muted); font-size: 12px;
+    }
+    #dirtyIndicator.dirty { color: #b45309; font-weight: 600; }
+    #message { margin-left: auto; color: var(--muted); }
+    #message.error { color: var(--danger); }
+    body.reader #workspace { grid-template-columns: 1fr; }
+    body.reader #editorPane { display: none; }
+    body.reader #preview { max-width: 980px; }
+    @media (max-width: 900px) {
+      #workspace { grid-template-columns: 1fr; }
+      #editorPane { border-right: 0; border-bottom: 1px solid var(--line); }
+      body:not(.reader) #previewPane { display: none; }
+      #fileName { max-width: 28vw; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="toolbar">
+    <button id="openBtn">打开</button>
+    <button id="saveBtn" class="primary">保存</button>
+    <button id="saveAsBtn">另存为</button>
+    <div class="separator"></div>
+    <button id="editModeBtn" class="mode active">编辑</button>
+    <button id="readerModeBtn" class="mode">阅读</button>
+    <div id="fileName" title="">未命名.md</div>
+  </div>
+
+  <div id="workspace">
+    <section id="editorPane"><textarea id="editor" spellcheck="false" aria-label="Markdown 编辑器"></textarea></section>
+    <section id="previewPane"><article id="preview"></article></section>
+  </div>
+
+  <div id="statusbar">
+    <span id="dirtyIndicator">已保存</span>
+    <span id="encodingIndicator">UTF-8</span>
+    <span id="eolIndicator">NONE</span>
+    <span id="readOnlyIndicator" hidden>Read Only</span>
+    <span id="message"></span>
+  </div>
+</div>
+
+<script>
+  const editor = document.getElementById('editor');
+  const preview = document.getElementById('preview');
+  const fileName = document.getElementById('fileName');
+  const dirtyIndicator = document.getElementById('dirtyIndicator');
+  const encodingIndicator = document.getElementById('encodingIndicator');
+  const eolIndicator = document.getElementById('eolIndicator');
+  const readOnlyIndicator = document.getElementById('readOnlyIndicator');
+  const saveBtn = document.getElementById('saveBtn');
+  const message = document.getElementById('message');
+  const editModeBtn = document.getElementById('editModeBtn');
+  const readerModeBtn = document.getElementById('readerModeBtn');
+
+  window.appState = {
+    path: null,
+    name: '未命名.md',
+    lastSavedContent: '',
+    dirty: false,
+    renderToken: 0,
+  };
+
+  function setMessage(text = '', isError = false) {
+    message.textContent = text;
+    message.classList.toggle('error', isError);
+  }
+
+  function updateChrome() {
+    const state = window.appState;
+    fileName.textContent = (state.dirty ? '* ' : '') + state.name;
+    fileName.title = state.path || state.name;
+    dirtyIndicator.textContent = state.dirty ? '未保存' : '已保存';
+    dirtyIndicator.classList.toggle('dirty', state.dirty);
+    document.title = `${state.dirty ? '* ' : ''}${state.name} — Markdown Reader & Editor`;
+  }
+
+
+  function applyFileFacts(doc) {
+    encodingIndicator.textContent = doc.encoding || (doc.has_bom ? 'UTF-8 BOM' : 'UTF-8');
+    eolIndicator.textContent = doc.eol_kind || 'NONE';
+    readOnlyIndicator.hidden = !doc.read_only;
+    editor.readOnly = saveBtn.disabled = Boolean(doc.read_only);
+  }
+
+  function applyDocument(doc) {
+    window.appState.path = doc.path;
+    window.appState.name = doc.name || '未命名.md';
+    window.appState.dirty = false;
+    editor.value = doc.content || '';
+    window.appState.lastSavedContent = editor.value;
+    applyFileFacts(doc);
+    updateChrome();
+    renderPreview();
+    setMessage('');
+  }
+
+  async function renderPreview() {
+    const token = ++window.appState.renderToken;
+    const result = await window.pywebview.api.render(editor.value);
+    if (token !== window.appState.renderToken) return;
+    if (!result.ok) {
+      setMessage(result.error || '渲染失败', true);
+      return;
+    }
+    preview.innerHTML = result.html;
+    wirePreviewLinks();
+  }
+
+  function wirePreviewLinks() {
+    preview.querySelectorAll('a[href]').forEach((anchor) => {
+      anchor.addEventListener('click', async (event) => {
+        const href = anchor.getAttribute('href') || '';
+        event.preventDefault();
+        if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:')) {
+          await window.pywebview.api.open_external(href);
+        } else {
+          setMessage('本地或相对链接暂不跳转，避免离开编辑器。');
+        }
+      });
+    });
+  }
+
+  function confirmDiscardIfDirty() {
+    if (!window.appState.dirty) return true;
+    return window.confirm('当前文件有未保存修改。继续操作将丢弃这些修改，是否继续？');
+  }
+
+  async function openFile() {
+    if (!confirmDiscardIfDirty()) return;
+    const result = await window.pywebview.api.open_file();
+    if (result.cancelled) return;
+    if (!result.ok) return setMessage(result.error || '无法打开文件', true);
+    applyDocument(result.document);
+  }
+
+  function markSaved(doc) {
+    window.appState.path = doc.path;
+    window.appState.name = doc.name || window.appState.name;
+    window.appState.lastSavedContent = editor.value;
+    window.appState.dirty = false;
+    applyFileFacts(doc);
+    updateChrome();
+    renderPreview();
+    setMessage('已保存');
+  }
+
+  async function saveFile() {
+    const result = await window.pywebview.api.save(editor.value);
+    if (result.cancelled) return;
+    if (!result.ok) return setMessage(result.error || '保存失败', true);
+    markSaved(result.document);
+  }
+
+  async function saveAsFile() {
+    const result = await window.pywebview.api.save_as(editor.value);
+    if (result.cancelled) return;
+    if (!result.ok) return setMessage(result.error || '另存为失败', true);
+    markSaved(result.document);
+  }
+
+  function setMode(mode) {
+    const reader = mode === 'reader';
+    document.body.classList.toggle('reader', reader);
+    editModeBtn.classList.toggle('active', !reader);
+    readerModeBtn.classList.toggle('active', reader);
+  }
+
+  let renderTimer = null;
+  editor.addEventListener('input', () => {
+    const wasDirty = window.appState.dirty;
+    window.appState.dirty = editor.value !== window.appState.lastSavedContent;
+    updateChrome();
+    if (wasDirty !== window.appState.dirty) {
+      void window.pywebview.api.set_dirty(window.appState.dirty);
+    }
+    clearTimeout(renderTimer);
+    renderTimer = setTimeout(renderPreview, 120);
+  });
+
+  document.getElementById('openBtn').addEventListener('click', openFile);
+  document.getElementById('saveBtn').addEventListener('click', saveFile);
+  document.getElementById('saveAsBtn').addEventListener('click', saveAsFile);
+  editModeBtn.addEventListener('click', () => setMode('edit'));
+  readerModeBtn.addEventListener('click', () => setMode('reader'));
+
+  document.addEventListener('keydown', (event) => {
+    const cmd = event.ctrlKey || event.metaKey;
+    if (!cmd) return;
+    if (event.key.toLowerCase() === 's') {
+      event.preventDefault();
+      event.shiftKey ? saveAsFile() : saveFile();
+    } else if (event.key.toLowerCase() === 'o') {
+      event.preventDefault();
+      openFile();
+    }
+  });
+
+  window.addEventListener('pywebviewready', async () => {
+    const state = await window.pywebview.api.initial_state();
+    applyDocument(state);
+    if (state.startup_error) setMessage(state.startup_error, true);
+    editor.focus();
+  });
+</script>
+</body>
+</html>
