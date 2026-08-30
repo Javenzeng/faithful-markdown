@@ -121,19 +121,15 @@ Next Gate: **V2.4 — External State Integrity: Scope / Evidence Review**
 
 ## V2.4 — External State Integrity
 
-**Direction: PENDING**
-**Execution: NOT_STARTED**
+**Direction: APPROVED**
+**Execution: ACCEPTED**
+**Outcome: TEST_ONLY**
 
-目标：强化 Agent / IDE / sync 工具并发环境下的确定行为。
+current-path deleted before Save invariant covered：Save 明确失败，`_safe_write` 不进入，原 path 不被重建，baseline fingerprints 不推进，pending edited content 可通过 explicit Save As 恢复。
 
-覆盖：
-- 文件被其他程序保存
-- 文件被删除
-- 文件被移动 / 替换
-- 权限发生变化
-- 同步盘替换文件
+fidelity 18/18 PASS；broader suite 29/29 PASS。runtime LOC +0，dependency +0，state +0，abstraction +0；no runtime defect found。accepted source baseline remains V2.1。
 
-原则：不引入长期后台 watcher；优先在打开、保存等必要操作节点核验事实。
+Next Gate: **V2.5 — Large-File Discipline: Entry Criteria / Evidence Review**
 
 ---
 

@@ -7,10 +7,10 @@ Repository: `Javenzeng/faithful-markdown`
 Default branch: `main`
 Canonical source + durable governance: GitHub
 Accepted source baseline: **V2.1 — Content Fidelity Contract**
-Current milestone: **V2.4 — External State Integrity**
-V2.4 Direction: `PENDING`
-V2.4 Execution: `NOT_STARTED`
-V2.4 source implementation authorization: `NOT_GRANTED`
+Current milestone: **V2.5 — Large-File Discipline**
+V2.5 Direction: `CONDITIONAL`
+V2.5 Execution: `NOT_STARTED`
+V2.5 source implementation authorization: `NOT_GRANTED`
 Current owner: Human
 Baton: `HUMAN`
 Blocker: `None`
@@ -18,9 +18,9 @@ Packaging: `NOT_AUTHORIZED`
 
 ## Last Accepted Fact
 
-2026-08-30：V2.3 Human Acceptance — **ACCEPTED / TEST_ONLY**。
+2026-08-30：V2.4 Human Acceptance — **ACCEPTED / TEST_ONLY**。
 
-4 个高价值 fidelity edge areas 已测试覆盖：mixed-EOL edited behavior follows current file-level EOL policy；final/no-final newline edited behavior；CJK、emoji 与 decomposed combining sequence preservation；empty / 1-char。无 runtime bug evidence；无 runtime、fixture、dependency、state 或 abstraction 增长。accepted source baseline 仍为 V2.1 — Content Fidelity Contract。
+新增一个 regression invariant：original `current_path` 在 Save 开始前已删除；Save 明确失败，`_safe_write` 不进入，原 path 不被重建，baseline fingerprints 不推进，pending edited content 可通过 explicit Save As 恢复。fidelity tests 18/18 PASS；broader suite 29/29 PASS。runtime LOC +0，dependency +0，runtime state +0，abstraction +0，fixture +0；no runtime bug evidence。accepted source baseline 仍为 V2.1 — Content Fidelity Contract。
 
 After this accepted public push:
 - GitHub = canonical source + durable governance + Git history.
@@ -128,12 +128,20 @@ Evidence:
 
 ## Current Authorization Boundary
 
-只允许进入 V2.4 Scope / Evidence Review。
+V2.4 已关闭。当前只允许进入：
 
-**NO V2.4 SOURCE MODIFICATION.**
+**V2.5 — Large-File Discipline: Entry Criteria / Evidence Review**
+
+V2.5 Direction: `CONDITIONAL`。没有真实大文件性能或正确性证据时，不应自动启动 implementation。
+
+**NO V2.5 SOURCE MODIFICATION.**
 
 ## Next Gate
 
-**V2.4 — External State Integrity: Scope / Evidence Review**
+**V2.5 — Large-File Discipline: Entry Criteria / Evidence Review**
+
+先回答：当前是否存在真实证据证明 large-file behavior 已成为产品问题？
+
+如果没有，允许推荐 `DEFER / NOT_ACTIVATED`，不要为了 milestone 顺序制造工作。
 
 Baton: `HUMAN`
