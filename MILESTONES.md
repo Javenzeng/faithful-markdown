@@ -138,6 +138,10 @@ Next Gate: **V2.5 — Large-File Discipline: Entry Criteria / Evidence Review**
 **Direction: CONDITIONAL**
 **Execution: NOT_STARTED**
 
+**Entry Criteria Decision: `DEFER / NOT_ACTIVATED` — 2026-08-30**
+
+无真实证据触发 activation；runtime / test / benchmark changes: NONE。仅在未来真实证据出现时重新评估。
+
 仅在真实用户或测试证明大文件成为问题时启动。
 
 目标不是追求夸张文件大小，而是建立明确性能边界与必要降级策略。
@@ -150,6 +154,8 @@ Next Gate: **V2.5 — Large-File Discipline: Entry Criteria / Evidence Review**
 
 **Direction: PENDING**
 **Execution: NOT_STARTED**
+
+Next Gate: **V2.6 — Reproducible Release: Scope / Evidence / Change Boundary Review**
 
 目标：提高 release 可验证性与开源可信度。
 

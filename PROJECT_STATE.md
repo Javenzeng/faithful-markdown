@@ -7,10 +7,10 @@ Repository: `Javenzeng/faithful-markdown`
 Default branch: `main`
 Canonical source + durable governance: GitHub
 Accepted source baseline: **V2.1 — Content Fidelity Contract**
-Current milestone: **V2.5 — Large-File Discipline**
-V2.5 Direction: `CONDITIONAL`
-V2.5 Execution: `NOT_STARTED`
-V2.5 source implementation authorization: `NOT_GRANTED`
+Current milestone: **V2.6 — Reproducible Release**
+V2.6 Direction: `PENDING`
+V2.6 Execution: `NOT_STARTED`
+V2.6 source/build implementation authorization: `NOT_GRANTED`
 Current owner: Human
 Baton: `HUMAN`
 Blocker: `None`
@@ -18,9 +18,9 @@ Packaging: `NOT_AUTHORIZED`
 
 ## Last Accepted Fact
 
-2026-08-30：V2.4 Human Acceptance — **ACCEPTED / TEST_ONLY**。
+2026-08-30：V2.5 Entry Criteria Review — **DEFER / NOT_ACTIVATED**。
 
-新增一个 regression invariant：original `current_path` 在 Save 开始前已删除；Save 明确失败，`_safe_write` 不进入，原 path 不被重建，baseline fingerprints 不推进，pending edited content 可通过 explicit Save As 恢复。fidelity tests 18/18 PASS；broader suite 29/29 PASS。runtime LOC +0，dependency +0，runtime state +0，abstraction +0，fixture +0；no runtime bug evidence。accepted source baseline 仍为 V2.1 — Content Fidelity Contract。
+无真实大文件缺陷、性能、hang 或 crash 证据；long-single-line DEFER。benchmark +0，test +0，runtime +0，dependency +0，state +0，abstraction +0。V2.5 remains `CONDITIONAL / NOT_STARTED`，source authorization remains `NOT_GRANTED`。V2.5 was not executed or accepted；仅在未来真实证据触发时重新评估。accepted source baseline 仍为 V2.1 — Content Fidelity Contract。
 
 After this accepted public push:
 - GitHub = canonical source + durable governance + Git history.
@@ -128,20 +128,16 @@ Evidence:
 
 ## Current Authorization Boundary
 
-V2.4 已关闭。当前只允许进入：
+V2.5 已 DEFER / NOT_ACTIVATED。当前只允许进入：
 
-**V2.5 — Large-File Discipline: Entry Criteria / Evidence Review**
+**V2.6 — Reproducible Release: Scope / Evidence / Change Boundary Review**
 
-V2.5 Direction: `CONDITIONAL`。没有真实大文件性能或正确性证据时，不应自动启动 implementation。
+不得自动 build、package、create GitHub Release、modify build scripts、add dependency lock 或 generate binaries。
 
-**NO V2.5 SOURCE MODIFICATION.**
+**NO V2.6 IMPLEMENTATION AUTHORIZATION YET.**
 
 ## Next Gate
 
-**V2.5 — Large-File Discipline: Entry Criteria / Evidence Review**
-
-先回答：当前是否存在真实证据证明 large-file behavior 已成为产品问题？
-
-如果没有，允许推荐 `DEFER / NOT_ACTIVATED`，不要为了 milestone 顺序制造工作。
+**V2.6 — Reproducible Release: Scope / Evidence / Change Boundary Review**
 
 Baton: `HUMAN`
