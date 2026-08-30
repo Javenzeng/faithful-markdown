@@ -277,6 +277,30 @@ class FidelityTests(unittest.TestCase):
             store.save("")
             self.assertEqual(path.read_bytes(), b"")
 
+    def test_deleted_current_file_before_save_fails_safely(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self.copy_fixture(tmp, "utf8_lf.md.bin", "A.md")
+            store = DocumentStore()
+            state = store.load(path)
+            source_fingerprint = store.source_fingerprint
+            editor_fingerprint = store.editor_fingerprint
+            edited = state["content"].replace("line", "edited")
+            path.unlink()
+
+            with patch.object(store, "_safe_write", wraps=store._safe_write) as safe_write:
+                with self.assertRaises(EditorError):
+                    store.save(edited)
+
+            self.assertEqual(safe_write.call_count, 0)
+            self.assertFalse(path.exists())
+            self.assertEqual(store.source_fingerprint, source_fingerprint)
+            self.assertEqual(store.editor_fingerprint, editor_fingerprint)
+            self.assertEqual(store.current_path, path.resolve())
+
+            recovery = Path(tmp) / "B.md"
+            store.save_as(recovery, edited)
+            self.assertEqual(recovery.read_bytes(), edited.encode("utf-8"))
+
     def test_read_only_fact_is_upfront_and_unchanged_save_is_noop(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = self.copy_fixture(tmp, "utf8_lf.md.bin")
