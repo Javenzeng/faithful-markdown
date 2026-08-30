@@ -2,7 +2,7 @@
 
 ## Current Baseline
 
-Project: Markdown Reader & Editor
+Project: Faithful Markdown
 Repository: `Javenzeng/faithful-markdown`
 Default branch: `main`
 Canonical source + durable governance: GitHub
@@ -10,15 +10,20 @@ Accepted source baseline: **V2.1 — Content Fidelity Contract**
 Current milestone: **None — operational use / evidence collection**
 V2.6 Direction: `APPROVED`
 V2.6 Execution: `ACCEPTED`
-Latest accepted release source commit: `cb6c3a62f5cf8eeb2ec21d1530123cd18f4bc4a6`
-Latest accepted public release: `v2.6`
-Artifact SHA-256: `F2E15FC962B2765F7957349593045B907BD0F2AE35E3E772956DD9E8BCF74605`
+Latest accepted release source commit: `5e1644d6a661c3a07f8c49787ae6fd1c1342402c`
+Latest accepted public release: `v2.7`
+Artifact: `FaithfulMarkdown.exe`
+Artifact SHA-256: `9846C856267D15EB350211BB1B0AE2640322430AE0E61640DAEDB8F0829D044E`
 Current owner: Human
 Baton: `HUMAN`
 Blocker: `None`
 Packaging: `COMPLETED`
 
 ## Last Accepted Fact
+
+2026-08-30：V2.7 Windows App Identity **ACCEPTED**。
+
+Faithful Markdown identity completed；canonical build 29/29 PASS；packaged Windows evidence PASS；Register / default-app guard / unregister success PASS；GitHub Release `v2.7` published and remotely hash-verified。accepted source baseline remains V2.1 — Content Fidelity Contract。V2.5 remains `DEFER / NOT_ACTIVATED`；V3 remains `CONDITIONAL / NOT_STARTED`。
 
 2026-08-30：V2.6 — Reproducible Release **ACCEPTED**。
 
@@ -132,6 +137,8 @@ Evidence:
 ## Current Authorization Boundary
 
 No active implementation authorization.
+
+V2.7 is accepted and released. Future changes require a new Human authorization。
 
 V2.5 remains `DEFER / NOT_ACTIVATED`。V3 remains `CONDITIONAL / NOT_STARTED`。Future source changes require a new Human authorization based on real evidence。
 

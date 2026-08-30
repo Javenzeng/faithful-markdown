@@ -1,4 +1,4 @@
-# MILESTONES.md — Markdown Reader & Editor
+# MILESTONES.md — Faithful Markdown
 
 ## Status Model
 
@@ -175,6 +175,28 @@ Next Gate: Operational use / evidence collection. No active implementation miles
 - 可重复或至少可审计的 Windows 构建流程
 
 正式 GitHub Release 应以这一阶段的可审计产物为基础。
+
+---
+
+## V2.7 — Windows App Identity
+
+**Direction: APPROVED**
+**Execution: ACCEPTED**
+
+- product display name: Faithful Markdown
+- EXE: `FaithfulMarkdown.exe`
+- window / EXE / taskbar identity unified
+- `.md/.markdown` per-user Windows registration
+- no silent default-app takeover
+- default-handler guard uses Windows Shell association resolution
+- Register / guard / unregister Windows evidence PASS
+- 29/29 tests PASS
+- release source commit: `5e1644d6a661c3a07f8c49787ae6fd1c1342402c`
+- artifact SHA-256: `9846C856267D15EB350211BB1B0AE2640322430AE0E61640DAEDB8F0829D044E`
+- GitHub Release: `v2.7`
+- accepted source baseline remains V2.1
+
+Next Gate: Operational use / evidence collection. No active implementation milestone. Do not start V2.8 or V3。
 
 ---
 
