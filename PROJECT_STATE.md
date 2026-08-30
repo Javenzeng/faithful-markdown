@@ -7,18 +7,22 @@ Repository: `Javenzeng/faithful-markdown`
 Default branch: `main`
 Canonical source + durable governance: GitHub
 Accepted source baseline: **V2.1 — Content Fidelity Contract**
-Current milestone: **V2.6 — Reproducible Release**
-V2.6 Direction: `PENDING`
-V2.6 Execution: `NOT_STARTED`
-V2.6 source/build implementation authorization: `NOT_GRANTED`
+Current milestone: **None — operational use / evidence collection**
+V2.6 Direction: `APPROVED`
+V2.6 Execution: `ACCEPTED`
+Latest accepted release source commit: `cb6c3a62f5cf8eeb2ec21d1530123cd18f4bc4a6`
+Latest accepted public release: `v2.6`
+Artifact SHA-256: `F2E15FC962B2765F7957349593045B907BD0F2AE35E3E772956DD9E8BCF74605`
 Current owner: Human
 Baton: `HUMAN`
 Blocker: `None`
-Packaging: `NOT_AUTHORIZED`
+Packaging: `COMPLETED`
 
 ## Last Accepted Fact
 
-2026-08-30：V2.5 Entry Criteria Review — **DEFER / NOT_ACTIVATED**。
+2026-08-30：V2.6 — Reproducible Release **ACCEPTED**。
+
+GitHub Release `v2.6` published from source commit `cb6c3a62f5cf8eeb2ec21d1530123cd18f4bc4a6`；EXE SHA-256 为 `F2E15FC962B2765F7957349593045B907BD0F2AE35E3E772956DD9E8BCF74605`。29/29 tests、packaged cold start、icon、Human Smoke 与远端 artifact hash verification 均 PASS。V2.5 remains `DEFER / NOT_ACTIVATED`；V3 remains `CONDITIONAL / NOT_STARTED`。
 
 无真实大文件缺陷、性能、hang 或 crash 证据；long-single-line DEFER。benchmark +0，test +0，runtime +0，dependency +0，state +0，abstraction +0。V2.5 remains `CONDITIONAL / NOT_STARTED`，source authorization remains `NOT_GRANTED`。V2.5 was not executed or accepted；仅在未来真实证据触发时重新评估。accepted source baseline 仍为 V2.1 — Content Fidelity Contract。
 
@@ -124,20 +128,15 @@ Evidence:
 - Manager / Reviewer 默认不改业务源码。
 - Windows runtime / filesystem facts 仍必须由 Human / Codex 本地验证。
 - public Git history 不存放二进制。
-- 当前 `build_windows.ps1` 会制造 `.venv/build/dist/.spec`；build-hygiene debt 仍保留，未授权顺手修改。
 
 ## Current Authorization Boundary
 
-V2.5 已 DEFER / NOT_ACTIVATED。当前只允许进入：
+No active implementation authorization.
 
-**V2.6 — Reproducible Release: Scope / Evidence / Change Boundary Review**
-
-不得自动 build、package、create GitHub Release、modify build scripts、add dependency lock 或 generate binaries。
-
-**NO V2.6 IMPLEMENTATION AUTHORIZATION YET.**
+V2.5 remains `DEFER / NOT_ACTIVATED`。V3 remains `CONDITIONAL / NOT_STARTED`。Future source changes require a new Human authorization based on real evidence。
 
 ## Next Gate
 
-**V2.6 — Reproducible Release: Scope / Evidence / Change Boundary Review**
+Operational use / evidence collection。No active implementation milestone。V2.5 or V3 may be reconsidered only when real evidence triggers them。
 
 Baton: `HUMAN`

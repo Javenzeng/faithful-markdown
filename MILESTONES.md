@@ -152,10 +152,18 @@ Next Gate: **V2.5 — Large-File Discipline: Entry Criteria / Evidence Review**
 
 ## V2.6 — Reproducible Release
 
-**Direction: PENDING**
-**Execution: NOT_STARTED**
+**Direction: APPROVED**
+**Execution: ACCEPTED**
 
-Next Gate: **V2.6 — Reproducible Release: Scope / Evidence / Change Boundary Review**
+- Windows release build: PASS
+- Full unittest: 29/29 PASS
+- Human Smoke: PASS
+- Release source commit: `cb6c3a62f5cf8eeb2ec21d1530123cd18f4bc4a6`
+- Artifact SHA-256: `F2E15FC962B2765F7957349593045B907BD0F2AE35E3E772956DD9E8BCF74605`
+- GitHub Release: `v2.6`
+- Auditable release achieved; no bit-for-bit reproducibility claim.
+
+Next Gate: Operational use / evidence collection. No active implementation milestone. V2.5 or V3 may be reconsidered only when real evidence triggers them.
 
 目标：提高 release 可验证性与开源可信度。
 

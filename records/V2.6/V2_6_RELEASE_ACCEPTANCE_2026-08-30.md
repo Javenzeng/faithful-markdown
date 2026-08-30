@@ -1,0 +1,42 @@
+# V2.6 Release Acceptance
+
+- Human decision: **V2.6 — Reproducible Release ACCEPTED**
+- Date: 2026-08-30
+- Repository: `Javenzeng/faithful-markdown`
+- Release: [v2.6](https://github.com/Javenzeng/faithful-markdown/releases/tag/v2.6)
+- Release source commit: `cb6c3a62f5cf8eeb2ec21d1530123cd18f4bc4a6`
+- Artifact: `Markdown_Reader_Editor.exe`, 14556934 bytes
+- Artifact SHA-256: `F2E15FC962B2765F7957349593045B907BD0F2AE35E3E772956DD9E8BCF74605`
+- Build: Python 3.13.15 x64; pip 26.2.1; pywebview 6.2.1; mistune 3.2.1; PyInstaller 6.22.2
+- pip freeze:
+  - `altgraph==0.17.5`
+  - `bottle==0.13.4`
+  - `cffi==2.1.1`
+  - `clr_loader==0.3.1`
+  - `mistune==3.2.1`
+  - `packaging==26.3`
+  - `pefile==2024.8.26`
+  - `proxy_tools==0.1.0`
+  - `pycparser==3.0`
+  - `pyinstaller==6.22.2`
+  - `pyinstaller-hooks-contrib==2026.7`
+  - `pythonnet==3.1.0`
+  - `pywebview==6.2.1`
+  - `pywin32-ctypes==0.2.3`
+  - `setuptools==84.0.0`
+  - `typing_extensions==4.16.0`
+- Full unittest: 29/29 PASS
+- Build: PASS
+- Temporary workspace cleanup: PASS
+- Post-build git status: clean
+- Packaged cold-start: PASS
+- Icon: PASS
+- Human Smoke: PASS — startup; open/render; edit/save/reopen; No-op Save hash
+- Remote release artifact download SHA verification: PASS
+- V2.6 runtime change: NONE
+- V2.6 tests change: NONE
+- V2.6 requirements change: NONE
+- V2.6 build discipline changed only build packaging path/script + approved icon
+- No bit-for-bit reproducibility claim
+- V2.5: `DEFER / NOT_ACTIVATED`
+- V3: `CONDITIONAL / NOT_STARTED`
