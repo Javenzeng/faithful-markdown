@@ -30,7 +30,7 @@ $venv = Join-Path $workspace "venv"
 $workPath = Join-Path $workspace "pyinstaller-work"
 $specPath = Join-Path $workspace "pyinstaller-spec"
 $distPath = Join-Path $PSScriptRoot "dist"
-$exe = Join-Path $distPath "Markdown_Reader_Editor.exe"
+$exe = Join-Path $distPath "FaithfulMarkdown.exe"
 $assetPath = Join-Path $PSScriptRoot "assets\index.html"
 $iconPath = Join-Path $PSScriptRoot "assets\app.ico"
 
@@ -64,7 +64,7 @@ try {
     Write-Host "PyInstaller work path: $workPath"
     Write-Host "PyInstaller spec path: $specPath"
     Write-Host "PyInstaller dist path: $distPath"
-    Write-Host "PyInstaller command: `"$python`" -m PyInstaller --noconfirm --clean --onefile --windowed --name Markdown_Reader_Editor --icon `"$iconPath`" --add-data `"$assetPath;assets`" --workpath `"$workPath`" --specpath `"$specPath`" --distpath `"$distPath`" app.py"
+    Write-Host "PyInstaller command: `"$python`" -m PyInstaller --noconfirm --clean --onefile --windowed --name FaithfulMarkdown --icon `"$iconPath`" --add-data `"$assetPath;assets`" --add-data `"$iconPath;assets`" --workpath `"$workPath`" --specpath `"$specPath`" --distpath `"$distPath`" app.py"
 
     if (Test-Path $exe) { Remove-Item $exe -ErrorAction Stop }
 
@@ -73,9 +73,10 @@ try {
         --clean `
         --onefile `
         --windowed `
-        --name "Markdown_Reader_Editor" `
+        --name "FaithfulMarkdown" `
         --icon $iconPath `
         --add-data "$assetPath;assets" `
+        --add-data "$iconPath;assets" `
         --workpath $workPath `
         --specpath $specPath `
         --distpath $distPath `

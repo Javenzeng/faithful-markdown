@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Markdown Reader & Editor</title>
+  <title>Faithful Markdown</title>
   <style>
     :root {
       color-scheme: light;
@@ -114,6 +114,8 @@
     <button id="openBtn">打开</button>
     <button id="saveBtn" class="primary">保存</button>
     <button id="saveAsBtn">另存为</button>
+    <button id="registerBtn">注册到 Windows</button>
+    <button id="unregisterBtn">取消注册</button>
     <div class="separator"></div>
     <button id="editModeBtn" class="mode active">编辑</button>
     <button id="readerModeBtn" class="mode">阅读</button>
@@ -166,7 +168,7 @@
     fileName.title = state.path || state.name;
     dirtyIndicator.textContent = state.dirty ? '未保存' : '已保存';
     dirtyIndicator.classList.toggle('dirty', state.dirty);
-    document.title = `${state.dirty ? '* ' : ''}${state.name} — Markdown Reader & Editor`;
+    document.title = `${state.dirty ? '* ' : ''}${state.name} — Faithful Markdown`;
   }
 
 
@@ -253,6 +255,16 @@
     markSaved(result.document);
   }
 
+  async function registerWindows() {
+    const result = await window.pywebview.api.register_with_windows();
+    setMessage(result.ok ? result.message : result.error, !result.ok);
+  }
+
+  async function unregisterWindows() {
+    const result = await window.pywebview.api.unregister_from_windows();
+    setMessage(result.ok ? result.message : result.error, !result.ok);
+  }
+
   function setMode(mode) {
     const reader = mode === 'reader';
     document.body.classList.toggle('reader', reader);
@@ -275,6 +287,8 @@
   document.getElementById('openBtn').addEventListener('click', openFile);
   document.getElementById('saveBtn').addEventListener('click', saveFile);
   document.getElementById('saveAsBtn').addEventListener('click', saveAsFile);
+  document.getElementById('registerBtn').addEventListener('click', registerWindows);
+  document.getElementById('unregisterBtn').addEventListener('click', unregisterWindows);
   editModeBtn.addEventListener('click', () => setMode('edit'));
   readerModeBtn.addEventListener('click', () => setMode('reader'));
 

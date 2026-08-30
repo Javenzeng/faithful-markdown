@@ -27,6 +27,8 @@ EXPECTED_PUBLIC_METHODS = {
     "save",
     "save_as",
     "open_external",
+    "register_with_windows",
+    "unregister_from_windows",
 }
 
 
