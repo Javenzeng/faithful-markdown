@@ -36,7 +36,20 @@
     button:hover { background: #f9fafb; }
     button.primary { background: var(--accent); border-color: var(--accent); color: white; }
     button.mode.active { background: var(--accent-soft); border-color: #bfdbfe; color: #1d4ed8; }
-    #app { display: grid; grid-template-rows: 52px 1fr 28px; height: 100%; }
+    #app { display: flex; flex-direction: column; height: 100%; }
+    [hidden] { display: none !important; }
+    #toolbar { min-height: 52px; flex-wrap: wrap; }
+    #statusbar { min-height: 28px; }
+    #findbar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--panel); border-bottom: 1px solid var(--line); }
+    #findInput { min-width: 160px; padding: 7px; border: 1px solid var(--line); border-radius: 6px; font: inherit; }
+    #content { display: flex; flex: 1; min-height: 0; }
+    #outline { width: 210px; flex-shrink: 0; overflow: auto; padding: 12px; border-right: 1px solid var(--line); background: var(--panel); }
+    #outline button { display: block; width: 100%; border: 0; text-align: left; overflow-wrap: anywhere; padding: 6px 8px; }
+    #outline p { color: var(--muted); }
+    #splitter { cursor: col-resize; background: var(--line); touch-action: none; }
+    #splitter:hover, #splitter:focus { background: var(--accent); }
+    #preview mark { background: #fef08a; color: inherit; }
+    #preview mark.current { background: #fb923c; }
     #toolbar {
       display: flex;
       align-items: center;
@@ -54,7 +67,7 @@
       text-overflow: ellipsis;
       color: var(--muted);
     }
-    #workspace { min-height: 0; display: grid; grid-template-columns: 1fr 1fr; }
+    #workspace { flex: 1; min-width: 0; min-height: 0; display: grid; --split: 50%; grid-template-columns: minmax(0, var(--split)) 6px minmax(0, 1fr); }
     #editorPane, #previewPane { min-width: 0; min-height: 0; background: var(--panel); }
     #editorPane { border-right: 1px solid var(--line); }
     #editor {
@@ -99,9 +112,12 @@
     #message.error { color: var(--danger); }
     body.reader #workspace { grid-template-columns: 1fr; }
     body.reader #editorPane { display: none; }
+    body.reader #splitter { display: none; }
     body.reader #preview { max-width: 980px; }
     @media (max-width: 900px) {
       #workspace { grid-template-columns: 1fr; }
+      #splitter { display: none; }
+      #outline { width: 170px; }
       #editorPane { border-right: 0; border-bottom: 1px solid var(--line); }
       body:not(.reader) #previewPane { display: none; }
       #fileName { max-width: 28vw; }
@@ -119,12 +135,25 @@
     <div class="separator"></div>
     <button id="editModeBtn" class="mode active">编辑</button>
     <button id="readerModeBtn" class="mode">阅读</button>
+    <button id="findBtn" title="Ctrl+F">查找</button>
+    <button id="outlineBtn" aria-expanded="false">目录</button>
     <div id="fileName" title="">未命名.md</div>
   </div>
 
+  <div id="findbar" hidden>
+    <input id="findInput" type="text" aria-label="查找文本" placeholder="查找文本" />
+    <span id="findCount" aria-live="polite">0 / 0</span>
+    <button id="findPrev" aria-label="上一个匹配">↑</button>
+    <button id="findNext" aria-label="下一个匹配">↓</button>
+    <button id="findClose">关闭</button>
+  </div>
+  <div id="content">
+  <nav id="outline" aria-label="文档目录" hidden></nav>
   <div id="workspace">
     <section id="editorPane"><textarea id="editor" spellcheck="false" aria-label="Markdown 编辑器"></textarea></section>
+    <div id="splitter" role="separator" aria-label="调整编辑与预览宽度" aria-orientation="vertical" aria-valuemin="20" aria-valuemax="80" aria-valuenow="50" tabindex="0"></div>
     <section id="previewPane"><article id="preview"></article></section>
+  </div>
   </div>
 
   <div id="statusbar">
@@ -148,6 +177,137 @@
   const message = document.getElementById('message');
   const editModeBtn = document.getElementById('editModeBtn');
   const readerModeBtn = document.getElementById('readerModeBtn');
+  const workspace = document.getElementById('workspace');
+  const splitter = document.getElementById('splitter');
+  const outline = document.getElementById('outline');
+  const findbar = document.getElementById('findbar');
+  const findInput = document.getElementById('findInput');
+  let matches = [];
+  let matchIndex = -1;
+
+  function buildOutline() {
+    outline.replaceChildren();
+    preview.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach((heading) => {
+      const button = document.createElement('button');
+      button.textContent = heading.textContent;
+      button.style.paddingLeft = `${8 + (Number(heading.tagName[1]) - 1) * 12}px`;
+      button.addEventListener('click', () => {
+        if (getComputedStyle(document.getElementById('previewPane')).display === 'none') setMode('reader');
+        heading.scrollIntoView({ block: 'start' });
+      });
+      outline.append(button);
+    });
+    if (!outline.children.length) {
+      const empty = document.createElement('p');
+      empty.textContent = '当前文档没有标题';
+      outline.append(empty);
+    }
+  }
+
+  function updateSearch() {
+    preview.querySelectorAll('mark[data-find]').forEach((mark) => mark.replaceWith(document.createTextNode(mark.textContent)));
+    preview.normalize();
+    matches = [];
+    matchIndex = -1;
+    const query = findInput.value.toLowerCase();
+    if (!findbar.hidden && query) {
+      if (!document.body.classList.contains('reader')) {
+        const text = editor.value.toLowerCase();
+        for (let pos = text.indexOf(query); pos !== -1; pos = text.indexOf(query, pos + query.length)) matches.push(pos);
+      } else {
+        const walker = document.createTreeWalker(preview, NodeFilter.SHOW_TEXT);
+        const nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach((node) => {
+          const text = node.textContent;
+          const lower = text.toLowerCase();
+          const fragment = document.createDocumentFragment();
+          let start = 0;
+          for (let pos = lower.indexOf(query); pos !== -1; pos = lower.indexOf(query, start)) {
+            fragment.append(document.createTextNode(text.slice(start, pos)));
+            const mark = document.createElement('mark');
+            mark.dataset.find = '';
+            mark.textContent = text.slice(pos, pos + query.length);
+            fragment.append(mark);
+            matches.push(mark);
+            start = pos + query.length;
+          }
+          fragment.append(document.createTextNode(text.slice(start)));
+          node.replaceWith(fragment);
+        });
+      }
+    }
+    document.getElementById('findCount').textContent = `0 / ${matches.length}`;
+    document.getElementById('findPrev').disabled = document.getElementById('findNext').disabled = !matches.length;
+  }
+
+  function moveMatch(direction) {
+    if (!matches.length) return;
+    if (matchIndex >= 0 && matches[matchIndex] instanceof Element) matches[matchIndex].classList.remove('current');
+    matchIndex = (matchIndex + direction + matches.length) % matches.length;
+    const match = matches[matchIndex];
+    if (typeof match === 'number') {
+      editor.focus();
+      editor.setSelectionRange(match, match + findInput.value.length);
+      // A mirror measures wrapped lines using the textarea's actual typography.
+      const mirror = document.createElement('div');
+      const style = getComputedStyle(editor);
+      mirror.style.cssText = `position:absolute;visibility:hidden;white-space:pre-wrap;overflow-wrap:break-word;width:${editor.clientWidth}px;font:${style.font};padding:${style.padding};tab-size:${style.tabSize}`;
+      mirror.textContent = editor.value.slice(0, match);
+      const caret = document.createElement('span');
+      caret.textContent = '\u200b';
+      mirror.append(caret);
+      document.body.append(mirror);
+      editor.scrollTop = Math.max(0, caret.offsetTop - editor.clientHeight / 2);
+      mirror.remove();
+    } else {
+      match.classList.add('current');
+      match.scrollIntoView({ block: 'center' });
+    }
+    document.getElementById('findCount').textContent = `${matchIndex + 1} / ${matches.length}`;
+  }
+
+  function toggleFind(show) {
+    findbar.hidden = !show;
+    updateSearch();
+    if (show) { findInput.focus(); findInput.select(); }
+  }
+
+  function setSplit(percent) {
+    const value = Math.max(20, Math.min(80, percent));
+    workspace.style.setProperty('--split', `${value}%`);
+    splitter.setAttribute('aria-valuenow', Math.round(value));
+  }
+  splitter.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    splitter.setPointerCapture(event.pointerId);
+  });
+  splitter.addEventListener('pointermove', (event) => {
+    if (!splitter.hasPointerCapture(event.pointerId)) return;
+    const rect = workspace.getBoundingClientRect();
+    setSplit((event.clientX - rect.left) / rect.width * 100);
+  });
+  splitter.addEventListener('pointerup', (event) => {
+    if (splitter.hasPointerCapture(event.pointerId)) splitter.releasePointerCapture(event.pointerId);
+  });
+  splitter.addEventListener('keydown', (event) => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+    event.preventDefault();
+    setSplit(Number(splitter.getAttribute('aria-valuenow')) + (event.key === 'ArrowLeft' ? -5 : 5));
+  });
+  document.getElementById('outlineBtn').addEventListener('click', (event) => {
+    outline.hidden = !outline.hidden;
+    event.currentTarget.setAttribute('aria-expanded', !outline.hidden);
+  });
+  document.getElementById('findBtn').addEventListener('click', () => toggleFind(true));
+  document.getElementById('findClose').addEventListener('click', () => toggleFind(false));
+  document.getElementById('findPrev').addEventListener('click', () => moveMatch(matchIndex === -1 ? matches.length : -1));
+  document.getElementById('findNext').addEventListener('click', () => moveMatch(1));
+  findInput.addEventListener('input', updateSearch);
+  findInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') { event.preventDefault(); moveMatch(event.shiftKey ? (matchIndex === -1 ? matches.length : -1) : 1); }
+  });
 
   window.appState = {
     path: null,
@@ -201,6 +361,8 @@
     }
     preview.innerHTML = result.html;
     wirePreviewLinks();
+    buildOutline();
+    updateSearch();
   }
 
   function wirePreviewLinks() {
@@ -270,6 +432,7 @@
     document.body.classList.toggle('reader', reader);
     editModeBtn.classList.toggle('active', !reader);
     readerModeBtn.classList.toggle('active', reader);
+    updateSearch();
   }
 
   let renderTimer = null;
@@ -277,6 +440,7 @@
     const wasDirty = window.appState.dirty;
     window.appState.dirty = editor.value !== window.appState.lastSavedContent;
     updateChrome();
+    if (!findbar.hidden) updateSearch();
     if (wasDirty !== window.appState.dirty) {
       void window.pywebview.api.set_dirty(window.appState.dirty);
     }
@@ -293,9 +457,13 @@
   readerModeBtn.addEventListener('click', () => setMode('reader'));
 
   document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !findbar.hidden) { toggleFind(false); editor.focus(); return; }
     const cmd = event.ctrlKey || event.metaKey;
     if (!cmd) return;
-    if (event.key.toLowerCase() === 's') {
+    if (event.key.toLowerCase() === 'f') {
+      event.preventDefault();
+      toggleFind(true);
+    } else if (event.key.toLowerCase() === 's') {
       event.preventDefault();
       event.shiftKey ? saveAsFile() : saveFile();
     } else if (event.key.toLowerCase() === 'o') {

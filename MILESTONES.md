@@ -196,7 +196,18 @@ Next Gate: Operational use / evidence collection. No active implementation miles
 - GitHub Release: `v2.7`
 - accepted source baseline remains V2.1
 
-Next Gate: Operational use / evidence collection. No active implementation milestone. Do not start V2.8 or V3。
+Next Gate: V2.8 document navigation, authorized by Human on 2026-10-09. V3 remains conditional.
+
+## V2.8 — Document Navigation
+
+**Direction: APPROVED**
+**Execution: READY_FOR_REVIEW**
+
+- Document search (Ctrl+F), draggable split view, collapsible heading outline.
+- Edge browser smoke PASS; Python regression runs as part of release packaging.
+- Human authorized Windows EXE packaging and GitHub source/release publication.
+- Human real-machine feature acceptance remains pending.
+- Evidence: `records/UI_NAVIGATION_2026-10-09.md`.
 
 ---
 

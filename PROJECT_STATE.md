@@ -7,7 +7,7 @@ Repository: `Javenzeng/faithful-markdown`
 Default branch: `main`
 Canonical source + durable governance: GitHub
 Accepted source baseline: **V2.1 — Content Fidelity Contract**
-Current milestone: **None — operational use / evidence collection**
+Current milestone: **Document navigation — local implementation ready for review**
 V2.6 Direction: `APPROVED`
 V2.6 Execution: `ACCEPTED`
 Latest accepted release source commit: `5e1644d6a661c3a07f8c49787ae6fd1c1342402c`
@@ -136,7 +136,7 @@ Evidence:
 
 ## Current Authorization Boundary
 
-No active implementation authorization.
+Human authorized document search, a draggable divider, and a collapsible heading outline in the current conversation. Local front-end implementation and Edge browser smoke verification completed; packaged Windows acceptance and publication remain pending. Evidence: `records/UI_NAVIGATION_2026-10-09.md`.
 
 V2.7 is accepted and released. Future changes require a new Human authorization。
 
@@ -144,6 +144,6 @@ V2.5 remains `DEFER / NOT_ACTIVATED`。V3 remains `CONDITIONAL / NOT_STARTED`。
 
 ## Next Gate
 
-Operational use / evidence collection。No active implementation milestone。V2.5 or V3 may be reconsidered only when real evidence triggers them。
+Review the three document-navigation controls, then package and publish only with Human release authorization. V2.5 and V3 remain unchanged.
 
 Baton: `HUMAN`

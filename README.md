@@ -8,6 +8,15 @@
 
 Core workflow: `Open -> Review -> Fix -> Save -> Close`
 
+## Document navigation
+
+- `Ctrl+F` opens case-insensitive text search. Enter / Shift+Enter or the arrow buttons move between matches; Escape closes search. Editing mode searches the Markdown source; reading mode searches rendered text within each text node.
+- Drag the divider to resize the editor and preview (20–80%), or focus it and use Left / Right. Narrow windows retain the single-pane layout.
+- The 目录 button opens a collapsible heading outline. Clicking a heading scrolls the preview to that section; in narrow windows it switches to reading mode.
+- These controls affect only the current window and do not change document content or save preferences.
+
+Browser smoke check (requires an existing Playwright installation and Microsoft Edge): `node tests/ui_navigation.cjs`. It checks the UI with a stubbed Python bridge, not the packaged Windows application.
+
 ## Content fidelity
 
 V2.1 centers on three rules:
@@ -58,7 +67,7 @@ Open a file directly:
 
 The historical accepted V2 executable is intentionally excluded from Git history; only its SHA-256 metadata and acceptance evidence are retained.
 
-V2.1 is an accepted **source** baseline. It does not yet have an accepted packaged artifact, and packaging is not claimed to be reproducible.
+The published Windows application is available through GitHub Releases. V2.8 adds document search, a resizable split view, and a collapsible heading outline; its release record distinguishes automated verification from Human acceptance.
 
 ## Known boundaries
 
