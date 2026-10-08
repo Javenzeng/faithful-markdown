@@ -204,9 +204,10 @@ Next Gate: V2.8 document navigation, authorized by Human on 2026-10-09. V3 remai
 **Execution: READY_FOR_REVIEW**
 
 - Document search (Ctrl+F), draggable split view, collapsible heading outline.
-- Edge browser smoke PASS; Python regression runs as part of release packaging.
+- Edge browser smoke and Python regression suite PASS; Windows EXE packaging completed.
 - Human authorized Windows EXE packaging and GitHub source/release publication.
 - Human real-machine feature acceptance remains pending.
+- GitHub Release `v2.8` published; uploaded artifact digest verified.
 - Evidence: `records/UI_NAVIGATION_2026-10-09.md`.
 
 ---

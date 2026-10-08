@@ -7,11 +7,15 @@ Repository: `Javenzeng/faithful-markdown`
 Default branch: `main`
 Canonical source + durable governance: GitHub
 Accepted source baseline: **V2.1 — Content Fidelity Contract**
-Current milestone: **Document navigation — local implementation ready for review**
+Current milestone: **V2.8 released — Human feature acceptance pending**
 V2.6 Direction: `APPROVED`
 V2.6 Execution: `ACCEPTED`
 Latest accepted release source commit: `5e1644d6a661c3a07f8c49787ae6fd1c1342402c`
 Latest accepted public release: `v2.7`
+Latest published release: `v2.8` (2026-10-09 Asia/Shanghai)
+V2.8 source commit: `00081fa3f34b4cae6ea680ecbd920d5d96bfb43c`
+V2.8 local EXE: `releases/v2.8/FaithfulMarkdown.exe`
+V2.8 SHA-256: `0348339A7854DB0F9A28B8504A599393D1BF83ED7853E0DFA609D9E0D437D288`
 Artifact: `FaithfulMarkdown.exe`
 Artifact SHA-256: `9846C856267D15EB350211BB1B0AE2640322430AE0E61640DAEDB8F0829D044E`
 Current owner: Human
@@ -136,7 +140,7 @@ Evidence:
 
 ## Current Authorization Boundary
 
-Human authorized document search, a draggable divider, and a collapsible heading outline in the current conversation. Local front-end implementation and Edge browser smoke verification completed; packaged Windows acceptance and publication remain pending. Evidence: `records/UI_NAVIGATION_2026-10-09.md`.
+Human authorized document search, a draggable divider, a collapsible heading outline, Windows packaging, and GitHub synchronization/publication. Implementation, Edge browser smoke, Python regression suite, build, and v2.8 Release publication completed. GitHub asset digest matches the build. Packaged Human feature acceptance remains pending. Evidence: `records/UI_NAVIGATION_2026-10-09.md`.
 
 V2.7 is accepted and released. Future changes require a new Human authorization。
 
@@ -144,6 +148,6 @@ V2.5 remains `DEFER / NOT_ACTIVATED`。V3 remains `CONDITIONAL / NOT_STARTED`。
 
 ## Next Gate
 
-Review the three document-navigation controls, then package and publish only with Human release authorization. V2.5 and V3 remain unchanged.
+Human tests the v2.8 EXE's search, divider, and outline. V2.5 and V3 remain unchanged.
 
 Baton: `HUMAN`

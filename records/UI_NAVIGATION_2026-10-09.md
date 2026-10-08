@@ -8,4 +8,13 @@ Verification: headless Microsoft Edge browser smoke PASS for search counts, prev
 
 JavaScript syntax and Git diff whitespace checks PASS. Existing Python suite could not import: available Python interpreters lack `mistune`. Python application and save/render APIs were not changed.
 
-No new EXE built and no GitHub publication performed. Existing v2.7 remains the published release.
+## Packaging and publication
+
+Human subsequently authorized packaging and GitHub synchronization. Built with Python 3.13.15 x64, PyInstaller 6.22.2, pywebview 6.2.1, and mistune 3.2.1 in the existing isolated build workflow. Python regression suite PASS, resolving the earlier missing-dependency limitation.
+
+- Release source commit: `00081fa3f34b4cae6ea680ecbd920d5d96bfb43c`.
+- Artifact: `releases/v2.8/FaithfulMarkdown.exe`, 13,256,830 bytes.
+- SHA-256: `0348339A7854DB0F9A28B8504A599393D1BF83ED7853E0DFA609D9E0D437D288`.
+- GitHub Release: https://github.com/Javenzeng/faithful-markdown/releases/tag/v2.8 ; uploaded asset digest and size verified through GitHub API.
+- Source push succeeded using single-command Git proxy configuration; no global configuration change.
+- Packaged launch created a responding process, but hidden-window launch did not expose a window title. This is not evidence of visual or feature acceptance. Human packaged feature acceptance remains pending.
