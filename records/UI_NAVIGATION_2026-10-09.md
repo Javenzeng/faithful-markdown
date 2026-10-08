@@ -1,5 +1,7 @@
 # Document navigation — local implementation
 
+V2.8.1 correction: Human requested the outline on the right, adjacent to reading. Moved its DOM position and changed its border to the left; no new runtime logic. Edge position/navigation checks and build Python suite PASS. Source `291a8609633c1e7eb7183eee634a6e1e6e928f99`; EXE `releases/v2.8.1/FaithfulMarkdown.exe`, 13,258,730 bytes, SHA-256 `C5ADB45F68E80B8BB10EE43E06363736D986E42BD041008DB238AD8F238CC8C9`. Human packaged acceptance pending.
+
 Human authorized document search, a draggable editor/preview divider, and a collapsible heading outline. Scope: existing front-end only; no new runtime dependency, persistence, file tree, replacement search, or Python API.
 
 Implemented in `assets/index.html`. Outline derives from rendered h1–h6 elements. Search is case-insensitive and mode-specific (source in edit mode, rendered text nodes in reading mode). Split width is transient and clamped to 20–80%.

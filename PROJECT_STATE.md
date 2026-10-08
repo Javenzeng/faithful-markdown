@@ -7,12 +7,16 @@ Repository: `Javenzeng/faithful-markdown`
 Default branch: `main`
 Canonical source + durable governance: GitHub
 Accepted source baseline: **V2.1 — Content Fidelity Contract**
-Current milestone: **V2.8 released — Human feature acceptance pending**
+Current milestone: **V2.8.1 released — Human feature acceptance pending**
 V2.6 Direction: `APPROVED`
 V2.6 Execution: `ACCEPTED`
 Latest accepted release source commit: `5e1644d6a661c3a07f8c49787ae6fd1c1342402c`
 Latest accepted public release: `v2.7`
 Latest published release: `v2.8` (2026-10-09 Asia/Shanghai)
+Latest correction: `v2.8.1` — heading outline moved to the right of the reading pane.
+V2.8.1 source commit: `291a8609633c1e7eb7183eee634a6e1e6e928f99`
+V2.8.1 local EXE: `releases/v2.8.1/FaithfulMarkdown.exe`
+V2.8.1 SHA-256: `C5ADB45F68E80B8BB10EE43E06363736D986E42BD041008DB238AD8F238CC8C9`
 V2.8 source commit: `00081fa3f34b4cae6ea680ecbd920d5d96bfb43c`
 V2.8 local EXE: `releases/v2.8/FaithfulMarkdown.exe`
 V2.8 SHA-256: `0348339A7854DB0F9A28B8504A599393D1BF83ED7853E0DFA609D9E0D437D288`
