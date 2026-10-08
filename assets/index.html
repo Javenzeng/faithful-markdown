@@ -43,7 +43,7 @@
     #findbar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--panel); border-bottom: 1px solid var(--line); }
     #findInput { min-width: 160px; padding: 7px; border: 1px solid var(--line); border-radius: 6px; font: inherit; }
     #content { display: flex; flex: 1; min-height: 0; }
-    #outline { width: 210px; flex-shrink: 0; overflow: auto; padding: 12px; border-right: 1px solid var(--line); background: var(--panel); }
+    #outline { width: 210px; flex-shrink: 0; overflow: auto; padding: 12px; border-left: 1px solid var(--line); background: var(--panel); }
     #outline button { display: block; width: 100%; border: 0; text-align: left; overflow-wrap: anywhere; padding: 6px 8px; }
     #outline p { color: var(--muted); }
     #splitter { cursor: col-resize; background: var(--line); touch-action: none; }
@@ -148,12 +148,12 @@
     <button id="findClose">关闭</button>
   </div>
   <div id="content">
-  <nav id="outline" aria-label="文档目录" hidden></nav>
   <div id="workspace">
     <section id="editorPane"><textarea id="editor" spellcheck="false" aria-label="Markdown 编辑器"></textarea></section>
     <div id="splitter" role="separator" aria-label="调整编辑与预览宽度" aria-orientation="vertical" aria-valuemin="20" aria-valuemax="80" aria-valuenow="50" tabindex="0"></div>
     <section id="previewPane"><article id="preview"></article></section>
   </div>
+  <nav id="outline" aria-label="文档目录" hidden></nav>
   </div>
 
   <div id="statusbar">
