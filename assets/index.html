@@ -370,6 +370,9 @@
     window.appState.name = doc.name || '未命名.md';
     window.appState.dirty = false;
     editor.value = doc.content || '';
+    editor.setSelectionRange(0, 0);
+    editor.scrollTop = editor.scrollLeft = 0;
+    previewPane.scrollTop = previewPane.scrollLeft = 0;
     window.appState.lastSavedContent = editor.value;
     applyFileFacts(doc);
     updateChrome();

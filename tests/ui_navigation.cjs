@@ -16,6 +16,20 @@ const path = require('node:path');
     applyDocument({ content: '# 标题\nneedle NEEDLE\n' + '正文\n'.repeat(100) + '## 末尾\nneedle', name: 'sample.md' });
   });
   await page.locator('#preview h2').waitFor();
+  await page.evaluate(async () => {
+    editor.scrollTop = editor.scrollHeight;
+    previewPane.scrollTop = previewPane.scrollHeight;
+    applyDocument({ content: '# 标题\nneedle NEEDLE\n' + '正文\n'.repeat(100) + '## 末尾\nneedle', name: 'another.md' });
+    await new Promise(requestAnimationFrame);
+    editor.focus();
+  });
+  assert.deepEqual(await page.evaluate(() => [editor.scrollTop, previewPane.scrollTop, editor.selectionStart]), [0, 0, 0]);
+  await page.evaluate(async () => {
+    editor.scrollTop = 100;
+    previewPane.scrollTop = 100;
+    await renderPreview();
+  });
+  assert.deepEqual(await page.evaluate(() => [editor.scrollTop, previewPane.scrollTop]), [100, 100]);
   await page.keyboard.press('Control+f');
   await page.locator('#findInput').fill('needle');
   assert.equal(await page.locator('#findCount').innerText(), '0 / 3');
