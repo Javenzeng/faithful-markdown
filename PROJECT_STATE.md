@@ -7,12 +7,16 @@ Repository: `Javenzeng/faithful-markdown`
 Default branch: `main`
 Canonical source + durable governance: GitHub
 Accepted source baseline: **V2.1 — Content Fidelity Contract**
-Current milestone: **V2.8.1 released — Human feature acceptance pending**
+Current milestone: **V2.9 — Human packaged feature acceptance pending**
 V2.6 Direction: `APPROVED`
 V2.6 Execution: `ACCEPTED`
 Latest accepted release source commit: `5e1644d6a661c3a07f8c49787ae6fd1c1342402c`
 Latest accepted public release: `v2.7`
-Latest published release: `v2.8` (2026-10-09 Asia/Shanghai)
+Latest published release: `v2.9` (2026-10-09 Asia/Shanghai)
+V2.9 source: `4dff78e44b2764aa4b5e49b1391e6a0e4822b631`
+V2.9 local EXE: `releases/v2.9/FaithfulMarkdown.exe`
+V2.9 SHA-256: `259249179A6D46FA72EB8F1BDFAC33B0CCD3A73C709A879692486852912050EF`
+V2.9 scope: independent pane toggles/resizing, rightmost read-only syntax reference, automatic list continuation. Edge UI smoke and Python regression PASS; Human packaged acceptance pending. Evidence: `records/UI_SYNTAX_LISTS_2026-10-09.md`.
 Latest correction: `v2.8.1` — heading outline moved to the right of the reading pane.
 V2.8.1 source commit: `291a8609633c1e7eb7183eee634a6e1e6e928f99`
 V2.8.1 local EXE: `releases/v2.8.1/FaithfulMarkdown.exe`
