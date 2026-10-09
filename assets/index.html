@@ -42,12 +42,15 @@
     #statusbar { min-height: 28px; }
     #findbar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--panel); border-bottom: 1px solid var(--line); }
     #findInput { min-width: 160px; padding: 7px; border: 1px solid var(--line); border-radius: 6px; font: inherit; }
-    #content { display: flex; flex: 1; min-height: 0; }
-    #outline { width: 210px; flex-shrink: 0; overflow: auto; padding: 12px; border-left: 1px solid var(--line); background: var(--panel); }
+    #content { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+    #content > section, #content > nav, #content > aside { flex: 1 1 0; min-width: 0; }
+    #outline { overflow: auto; padding: 12px; background: var(--panel); }
+    #syntaxPane { overflow: auto; padding: 16px; background: var(--panel); }
+    #syntaxPane pre { white-space: pre-wrap; overflow-wrap: anywhere; background: var(--code-bg); padding: 10px; border-radius: 6px; }
     #outline button { display: block; width: 100%; border: 0; text-align: left; overflow-wrap: anywhere; padding: 6px 8px; }
     #outline p { color: var(--muted); }
-    #splitter { cursor: col-resize; background: var(--line); touch-action: none; }
-    #splitter:hover, #splitter:focus { background: var(--accent); }
+    .splitter { flex: 0 0 6px; cursor: col-resize; background: var(--line); touch-action: none; }
+    .splitter:hover, .splitter:focus { background: var(--accent); }
     #preview mark { background: #fef08a; color: inherit; }
     #preview mark.current { background: #fb923c; }
     #toolbar {
@@ -67,7 +70,6 @@
       text-overflow: ellipsis;
       color: var(--muted);
     }
-    #workspace { flex: 1; min-width: 0; min-height: 0; display: grid; --split: 50%; grid-template-columns: minmax(0, var(--split)) 6px minmax(0, 1fr); }
     #editorPane, #previewPane { min-width: 0; min-height: 0; background: var(--panel); }
     #editorPane { border-right: 1px solid var(--line); }
     #editor {
@@ -110,18 +112,6 @@
     #dirtyIndicator.dirty { color: #b45309; font-weight: 600; }
     #message { margin-left: auto; color: var(--muted); }
     #message.error { color: var(--danger); }
-    body.reader #workspace { grid-template-columns: 1fr; }
-    body.reader #editorPane { display: none; }
-    body.reader #splitter { display: none; }
-    body.reader #preview { max-width: 980px; }
-    @media (max-width: 900px) {
-      #workspace { grid-template-columns: 1fr; }
-      #splitter { display: none; }
-      #outline { width: 170px; }
-      #editorPane { border-right: 0; border-bottom: 1px solid var(--line); }
-      body:not(.reader) #previewPane { display: none; }
-      #fileName { max-width: 28vw; }
-    }
   </style>
 </head>
 <body>
@@ -133,10 +123,11 @@
     <button id="registerBtn">注册到 Windows</button>
     <button id="unregisterBtn">取消注册</button>
     <div class="separator"></div>
-    <button id="editModeBtn" class="mode active">编辑</button>
-    <button id="readerModeBtn" class="mode">阅读</button>
+    <button id="editModeBtn" class="mode active" aria-pressed="true">编辑</button>
+    <button id="readerModeBtn" class="mode active" aria-pressed="true">阅读</button>
     <button id="findBtn" title="Ctrl+F">查找</button>
     <button id="outlineBtn" aria-expanded="false">目录</button>
+    <button id="syntaxBtn" class="mode" aria-pressed="false">语法</button>
     <div id="fileName" title="">未命名.md</div>
   </div>
 
@@ -148,12 +139,19 @@
     <button id="findClose">关闭</button>
   </div>
   <div id="content">
-  <div id="workspace">
     <section id="editorPane"><textarea id="editor" spellcheck="false" aria-label="Markdown 编辑器"></textarea></section>
-    <div id="splitter" role="separator" aria-label="调整编辑与预览宽度" aria-orientation="vertical" aria-valuemin="20" aria-valuemax="80" aria-valuenow="50" tabindex="0"></div>
     <section id="previewPane"><article id="preview"></article></section>
-  </div>
   <nav id="outline" aria-label="文档目录" hidden></nav>
+  <aside id="syntaxPane" aria-label="Markdown 语法示例" hidden>
+    <h3>标题分级</h3><pre># 一级标题\n## 二级标题\n### 三级标题</pre>
+    <h3>强调文字</h3><pre>*斜体*\n**加粗**\n***加粗斜体***</pre><p><em>斜体</em> · <strong>加粗</strong> · <strong><em>加粗斜体</em></strong></p>
+    <h3>待办</h3><pre>- [ ] 未完成\n- [x] 已完成</pre><p>☐ 未完成<br>☑ 已完成</p>
+    <h3>圆点分组</h3><pre>- 一级项目\n    - 二级项目\n        - 三级项目\n- 下一个一级项目</pre><ul><li>一级项目<ul><li>二级项目<ul><li>三级项目</li></ul></li></ul></li><li>下一个一级项目</li></ul>
+    <h3>编号分组</h3><pre>1. 一级项目\n    1. 二级项目\n        1. 三级项目\n2. 下一个一级项目</pre><ol><li>一级项目<ol><li>二级项目<ol><li>三级项目</li></ol></li></ol></li><li>下一个一级项目</li></ol>
+    <p>子级在行首加四个空格。每层独立编号，不自动生成 1.1.1。</p>
+    <h3>链接</h3><pre>[显示文字](https://example.com)</pre>
+    <p>列表行末按 Enter 续写；空项再按 Enter 结束。Shift+Enter 普通换行。Ctrl+Z 撤销。</p>
+  </aside>
   </div>
 
   <div id="statusbar">
@@ -177,8 +175,10 @@
   const message = document.getElementById('message');
   const editModeBtn = document.getElementById('editModeBtn');
   const readerModeBtn = document.getElementById('readerModeBtn');
-  const workspace = document.getElementById('workspace');
-  const splitter = document.getElementById('splitter');
+  const content = document.getElementById('content');
+  const editorPane = document.getElementById('editorPane');
+  const previewPane = document.getElementById('previewPane');
+  const syntaxPane = document.getElementById('syntaxPane');
   const outline = document.getElementById('outline');
   const findbar = document.getElementById('findbar');
   const findInput = document.getElementById('findInput');
@@ -192,7 +192,6 @@
       button.textContent = heading.textContent;
       button.style.paddingLeft = `${8 + (Number(heading.tagName[1]) - 1) * 12}px`;
       button.addEventListener('click', () => {
-        if (getComputedStyle(document.getElementById('previewPane')).display === 'none') setMode('reader');
         heading.scrollIntoView({ block: 'start' });
       });
       outline.append(button);
@@ -211,7 +210,7 @@
     matchIndex = -1;
     const query = findInput.value.toLowerCase();
     if (!findbar.hidden && query) {
-      if (!document.body.classList.contains('reader')) {
+      if (!editorPane.hidden) {
         const text = editor.value.toLowerCase();
         for (let pos = text.indexOf(query); pos !== -1; pos = text.indexOf(query, pos + query.length)) matches.push(pos);
       } else {
@@ -273,32 +272,59 @@
     if (show) { findInput.focus(); findInput.select(); }
   }
 
-  function setSplit(percent) {
-    const value = Math.max(20, Math.min(80, percent));
-    workspace.style.setProperty('--split', `${value}%`);
-    splitter.setAttribute('aria-valuenow', Math.round(value));
+  function refreshPanes() {
+    outline.hidden = previewPane.hidden || document.getElementById('outlineBtn').getAttribute('aria-expanded') !== 'true';
+    document.getElementById('outlineBtn').disabled = previewPane.hidden;
+    [[editorPane, editModeBtn], [previewPane, readerModeBtn], [syntaxPane, document.getElementById('syntaxBtn')]].forEach(([pane, button]) => {
+      button.classList.toggle('active', !pane.hidden);
+      button.setAttribute('aria-pressed', !pane.hidden);
+    });
+    content.querySelectorAll('.splitter').forEach(handle => handle.remove());
+    const panes = [editorPane, previewPane, outline, syntaxPane].filter(pane => !pane.hidden);
+    panes.slice(1).forEach((right, index) => {
+      const left = panes[index];
+      const handle = document.createElement('div');
+      handle.className = 'splitter';
+      handle.tabIndex = 0;
+      handle.setAttribute('role', 'separator');
+      handle.setAttribute('aria-label', '调整相邻区域宽度');
+      handle.setAttribute('aria-orientation', 'vertical');
+      let start;
+      function resize(delta, widths) {
+        const total = widths[0] + widths[1];
+        const minimum = Math.min(100, total / 3);
+        const width = Math.max(minimum, Math.min(total - minimum, widths[0] + delta));
+        const weight = Number(left.style.flexGrow || 1) + Number(right.style.flexGrow || 1);
+        left.style.flexGrow = weight * width / total;
+        right.style.flexGrow = weight * (total - width) / total;
+      }
+      handle.addEventListener('pointerdown', event => {
+        if (event.button !== 0) return;
+        event.preventDefault();
+        start = [event.clientX, left.clientWidth, right.clientWidth];
+        handle.setPointerCapture(event.pointerId);
+      });
+      handle.addEventListener('pointermove', event => {
+        if (handle.hasPointerCapture(event.pointerId)) resize(event.clientX - start[0], start.slice(1));
+      });
+      handle.addEventListener('pointerup', event => {
+        if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+      });
+      handle.addEventListener('keydown', event => {
+        if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+        event.preventDefault();
+        resize(event.key === 'ArrowLeft' ? -20 : 20, [left.clientWidth, right.clientWidth]);
+      });
+      content.insertBefore(handle, right);
+    });
+    updateSearch();
   }
-  splitter.addEventListener('pointerdown', (event) => {
-    if (event.button !== 0) return;
-    event.preventDefault();
-    splitter.setPointerCapture(event.pointerId);
-  });
-  splitter.addEventListener('pointermove', (event) => {
-    if (!splitter.hasPointerCapture(event.pointerId)) return;
-    const rect = workspace.getBoundingClientRect();
-    setSplit((event.clientX - rect.left) / rect.width * 100);
-  });
-  splitter.addEventListener('pointerup', (event) => {
-    if (splitter.hasPointerCapture(event.pointerId)) splitter.releasePointerCapture(event.pointerId);
-  });
-  splitter.addEventListener('keydown', (event) => {
-    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-    event.preventDefault();
-    setSplit(Number(splitter.getAttribute('aria-valuenow')) + (event.key === 'ArrowLeft' ? -5 : 5));
-  });
+  outline.style.flexGrow = 0.35;
+  syntaxPane.style.flexGrow = 0.7;
+  syntaxPane.querySelectorAll('pre').forEach(pre => { pre.textContent = pre.textContent.replaceAll('\\n', '\n'); });
   document.getElementById('outlineBtn').addEventListener('click', (event) => {
-    outline.hidden = !outline.hidden;
-    event.currentTarget.setAttribute('aria-expanded', !outline.hidden);
+    event.currentTarget.setAttribute('aria-expanded', event.currentTarget.getAttribute('aria-expanded') !== 'true');
+    refreshPanes();
   });
   document.getElementById('findBtn').addEventListener('click', () => toggleFind(true));
   document.getElementById('findClose').addEventListener('click', () => toggleFind(false));
@@ -427,13 +453,41 @@
     setMessage(result.ok ? result.message : result.error, !result.ok);
   }
 
-  function setMode(mode) {
-    const reader = mode === 'reader';
-    document.body.classList.toggle('reader', reader);
-    editModeBtn.classList.toggle('active', !reader);
-    readerModeBtn.classList.toggle('active', reader);
-    updateSearch();
+  function togglePane(pane, other) {
+    if (!pane.hidden && other.hidden) { setMessage('编辑和阅读至少保留一个区域。'); return; }
+    pane.hidden = !pane.hidden;
+    refreshPanes();
   }
+
+  editor.addEventListener('keydown', event => {
+    if (event.key !== 'Enter' || event.shiftKey || event.ctrlKey || event.metaKey || event.altKey || event.isComposing || editor.readOnly || editor.selectionStart !== editor.selectionEnd) return;
+    const position = editor.selectionStart;
+    if (position < editor.value.length && editor.value[position] !== '\n') return;
+    const lineStart = editor.value.lastIndexOf('\n', position - 1) + 1;
+    const before = editor.value.slice(0, lineStart);
+    let fence = null;
+    for (const line of before.split('\n')) {
+      const match = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
+      if (!match) continue;
+      if (!fence) fence = match[1];
+      else if (match[1][0] === fence[0] && match[1].length >= fence.length && !match[2].trim()) fence = null;
+    }
+    if (fence) return;
+    const line = editor.value.slice(lineStart, position);
+    const match = line.match(/^(\s*)([-+*]|\d{1,9}[.)])([ \t]+)(?:\[([ xX])\]([ \t]+))?(.*)$/);
+    if (!match) return;
+    let insertion;
+    if (!match[6].trim()) {
+      editor.setSelectionRange(lineStart, position);
+      insertion = '';
+    } else {
+      const marker = /^\d/.test(match[2]) ? `${Number.parseInt(match[2], 10) + 1}${match[2].slice(-1)}` : match[2];
+      insertion = '\n' + match[1] + marker + match[3] + (match[4] !== undefined ? '[ ]' + match[5] : '');
+    }
+    event.preventDefault();
+    // Chromium's editing command retains native undo and emits the existing input event.
+    if (!document.execCommand('insertText', false, insertion)) setMessage('无法自动续写列表。', true);
+  });
 
   let renderTimer = null;
   editor.addEventListener('input', () => {
@@ -453,8 +507,10 @@
   document.getElementById('saveAsBtn').addEventListener('click', saveAsFile);
   document.getElementById('registerBtn').addEventListener('click', registerWindows);
   document.getElementById('unregisterBtn').addEventListener('click', unregisterWindows);
-  editModeBtn.addEventListener('click', () => setMode('edit'));
-  readerModeBtn.addEventListener('click', () => setMode('reader'));
+  editModeBtn.addEventListener('click', () => togglePane(editorPane, previewPane));
+  readerModeBtn.addEventListener('click', () => togglePane(previewPane, editorPane));
+  document.getElementById('syntaxBtn').addEventListener('click', () => { syntaxPane.hidden = !syntaxPane.hidden; refreshPanes(); });
+  refreshPanes();
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && !findbar.hidden) { toggleFind(false); editor.focus(); return; }

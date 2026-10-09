@@ -25,19 +25,19 @@ const path = require('node:path');
   await page.locator('#findPrev').click();
   assert.equal(await page.locator('#findCount').innerText(), '3 / 3');
   assert.ok(await page.locator('#editor').evaluate(el => el.scrollTop) > 0);
-  await page.locator('#readerModeBtn').click();
+  await page.locator('#editModeBtn').click();
   assert.equal(await page.locator('#preview mark').count(), 3);
   await page.locator('#findNext').click();
   assert.equal(await page.locator('#preview mark.current').innerText(), 'needle');
   await page.keyboard.press('Escape');
   assert.equal(await page.locator('#preview mark').count(), 0);
   await page.locator('#editModeBtn').click();
-  const handle = await page.locator('#splitter').boundingBox();
+  const handle = await page.locator('.splitter').boundingBox();
   await page.mouse.move(handle.x + 3, handle.y + 100);
   await page.mouse.down();
   await page.mouse.move(850, handle.y + 100);
   await page.mouse.up();
-  assert.ok(Number(await page.locator('#splitter').getAttribute('aria-valuenow')) > 60);
+  assert.ok((await page.locator('#editorPane').boundingBox()).width > 800);
   await page.locator('#outlineBtn').click();
   const outlineBounds = await page.locator('#outline').boundingBox();
   const previewBounds = await page.locator('#previewPane').boundingBox();
@@ -47,8 +47,39 @@ const path = require('node:path');
   assert.ok(await page.locator('#previewPane').evaluate(el => el.scrollTop) > 0);
   await page.setViewportSize({ width: 820, height: 560 });
   await page.locator('#outline button').last().click();
-  assert.equal(await page.locator('body').getAttribute('class'), 'reader');
+  assert.equal(await page.locator('#previewPane').isVisible(), true);
   assert.equal(await page.evaluate(() => window.appState.dirty), false);
+  await page.locator('#syntaxBtn').click();
+  const syntax = await page.locator('#syntaxPane').boundingBox();
+  const outline = await page.locator('#outline').boundingBox();
+  assert.ok(syntax.x > outline.x);
+  await page.locator('#readerModeBtn').click();
+  assert.equal(await page.locator('#outline').isVisible(), false);
+  assert.equal(await page.locator('#syntaxPane').isVisible(), true);
+  await page.locator('#editModeBtn').click();
+  assert.equal(await page.locator('#editorPane').isVisible(), true);
+  await page.locator('#syntaxBtn').click();
+  assert.equal(await page.locator('#editor').inputValue(), '# 标题\nneedle NEEDLE\n' + '正文\n'.repeat(100) + '## 末尾\nneedle');
+  for (const [source, expected] of [
+    ['1. 项目', '1. 项目\n2. '], ['- 项目', '- 项目\n- '],
+    ['    + 项目', '    + 项目\n    + '], ['- [x] 完成', '- [x] 完成\n- [ ] '],
+    ['2) 项目', '2) 项目\n3) '], ['- ', ''], ['    1. ', ''],
+    ['普通正文', '普通正文\n'], ['```\n- 代码', '```\n- 代码\n'],
+  ]) {
+    await page.locator('#editor').fill(source);
+    await page.locator('#editor').press('Control+End');
+    await page.locator('#editor').press('Enter');
+    assert.equal(await page.locator('#editor').inputValue(), expected);
+    if (expected !== source + '\n') {
+      await page.locator('#editor').press('Control+z');
+      assert.equal(await page.locator('#editor').inputValue(), source);
+    }
+  }
+  await page.locator('#editor').fill('- 项目');
+  await page.locator('#editor').press('Control+End');
+  await page.locator('#editor').press('Shift+Enter');
+  assert.equal(await page.locator('#editor').inputValue(), '- 项目\n');
+  assert.equal(await page.evaluate(() => window.appState.dirty), true);
   assert.deepEqual(errors, []);
   await browser.close();
   console.log('PASS: search/count/wrap/scroll, reader highlights, splitter drag, outline jump, narrow layout, unchanged document');

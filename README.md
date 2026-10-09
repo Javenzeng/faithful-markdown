@@ -11,8 +11,9 @@ Core workflow: `Open -> Review -> Fix -> Save -> Close`
 ## Document navigation
 
 - `Ctrl+F` opens case-insensitive text search. Enter / Shift+Enter or the arrow buttons move between matches; Escape closes search. Editing mode searches the Markdown source; reading mode searches rendered text within each text node.
-- Drag the divider to resize the editor and preview (20–80%), or focus it and use Left / Right. Narrow windows retain the single-pane layout.
-- The 目录 button opens a collapsible heading outline. Clicking a heading scrolls the preview to that section; in narrow windows it switches to reading mode.
+- Toggle 编辑, 阅读 and 语法 independently; at least editor or reading remains visible. Drag separators between visible panes to resize, or focus them and use Left / Right. Layout changes apply only to this window.
+- The 目录 button opens a heading outline to the right of reading; hiding reading hides the outline. The read-only syntax reference opens at the far right and never replaces the document.
+- At the end of a list item, Enter continues bullets, numbers or unchecked tasks while retaining indentation. Enter on an empty item ends it. Shift+Enter inserts a plain newline; fenced code and IME confirmation are not continued. Ctrl+Z undoes the insertion. Indent nested lists with four spaces; each level numbers independently.
 - These controls affect only the current window and do not change document content or save preferences.
 
 Browser smoke check (requires an existing Playwright installation and Microsoft Edge): `node tests/ui_navigation.cjs`. It checks the UI with a stubbed Python bridge, not the packaged Windows application.
@@ -67,7 +68,7 @@ Open a file directly:
 
 The historical accepted V2 executable is intentionally excluded from Git history; only its SHA-256 metadata and acceptance evidence are retained.
 
-The published Windows application is available through GitHub Releases. V2.8 adds document search, a resizable split view, and a collapsible heading outline; its release record distinguishes automated verification from Human acceptance.
+The published Windows application is available through GitHub Releases. Release records distinguish automated verification from Human acceptance.
 
 ## Known boundaries
 
