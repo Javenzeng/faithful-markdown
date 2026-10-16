@@ -7,12 +7,16 @@ Repository: `Javenzeng/faithful-markdown`
 Default branch: `main`
 Canonical source + durable governance: GitHub
 Accepted source baseline: **V2.1 — Content Fidelity Contract**
-Current milestone: **V2.9.1 — Human packaged feature acceptance pending**
+Current milestone: **V2.10 — Human packaged image acceptance pending**
 V2.6 Direction: `APPROVED`
 V2.6 Execution: `ACCEPTED`
 Latest accepted release source commit: `5e1644d6a661c3a07f8c49787ae6fd1c1342402c`
 Latest accepted public release: `v2.7`
-Latest published release: `v2.9.1` (2026-10-09 Asia/Shanghai)
+Latest published release: `v2.10` (2026-10-16 Asia/Shanghai)
+V2.10 source: `7e4e27433e37bfd07d70c247b9ddcadb3aaa731f`
+V2.10 local EXE: `releases/v2.10/FaithfulMarkdown.exe`
+V2.10 SHA-256: `71ACF99666AD3F8DA0E1F5429E8B161D6A0723EB22644C3EFC5F3E27CB6AED0D`
+V2.10: local image selection and clipboard image/file paste; document-name.assets and relative references. 31 Python tests and Edge smoke PASS; actual native clipboard image import/preview PASS. Packaged UI and Explorer copy/paste Human acceptance pending.
 V2.9.1 source: `bbdcf30788af0ddaece8a9921317c000de967769`
 V2.9.1 local EXE: `releases/v2.9.1/FaithfulMarkdown.exe`
 V2.9.1 SHA-256: `FA9DDF2EEAE27AB0A9665C83F76765109571DF1CFCC15CC64C03F9EF6C10C2A2`
