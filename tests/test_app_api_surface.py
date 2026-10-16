@@ -24,6 +24,8 @@ EXPECTED_PUBLIC_METHODS = {
     "set_dirty",
     "render",
     "open_file",
+    "insert_image",
+    "paste_clipboard",
     "save",
     "save_as",
     "open_external",

@@ -8,6 +8,12 @@
 
 Core workflow: `Open -> Review -> Fix -> Save -> Close`
 
+## Images
+
+Use 插入图片 or copy one image file / a screenshot and press Ctrl+V in the editor. Supported formats: PNG, JPEG, GIF, WebP, BMP, up to 12 MB per image. Screenshots are saved as PNG. Save an unnamed document first (after saving, paste the image again).
+
+Images are copied into `<document name>.assets` beside the Markdown file and referenced with relative paths. Move the Markdown file together with that folder. Undo removes the reference but retains the image file. Save As does not relocate existing image folders; move/copy them with the document when changing directories.
+
 ## Document navigation
 
 - `Ctrl+F` opens case-insensitive text search. Enter / Shift+Enter or the arrow buttons move between matches; Escape closes search. Editing mode searches the Markdown source; reading mode searches rendered text within each text node.

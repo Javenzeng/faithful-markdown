@@ -8,7 +8,7 @@ from time import sleep
 
 import webview
 
-from core import DocumentStore, EditorError, render_markdown
+from core import DocumentStore, EditorError, render_markdown, import_image
 
 
 APP_TITLE = "Faithful Markdown"
@@ -149,6 +149,66 @@ class EditorAPI:
         if not result:
             return {"ok": False, "cancelled": True}
         return self._load_path(result[0])
+
+    def insert_image(self) -> dict:
+        if not self.store.current_path:
+            return {"ok": False, "error": "请先保存文档，再插入图片。"}
+        if not self._window:
+            return {"ok": False, "error": "窗口尚未初始化。"}
+        paths = self._window.create_file_dialog(webview.FileDialog.OPEN, allow_multiple=False,
+            file_types=("Images (*.png;*.jpg;*.jpeg;*.gif;*.webp;*.bmp)",))
+        if not paths:
+            return {"ok": False, "cancelled": True}
+        try:
+            path = Path(paths[0])
+            return {"ok": True, "markdown": import_image(self.store.current_path, path.read_bytes(), path.suffix)}
+        except (OSError, EditorError) as exc:
+            return {"ok": False, "error": str(exc)}
+
+    def paste_clipboard(self) -> dict:
+        result = {}
+        def read():
+            import ctypes
+            ctypes.windll.ole32.CoInitializeEx(None, 2)
+            try:
+                import clr
+                clr.AddReference('System.Windows.Forms')
+                clr.AddReference('System.Drawing')
+                from System.Windows.Forms import Clipboard
+                from System.Drawing.Imaging import ImageFormat
+                from System.IO import MemoryStream
+                if Clipboard.ContainsFileDropList():
+                    paths = list(Clipboard.GetFileDropList())
+                    if len(paths) != 1:
+                        raise EditorError('请一次复制一张图片。')
+                    path = Path(str(paths[0]))
+                    data, suffix = path.read_bytes(), path.suffix
+                elif Clipboard.ContainsImage():
+                    image = Clipboard.GetImage()
+                    stream = MemoryStream()
+                    try:
+                        image.Save(stream, ImageFormat.Png)
+                        data, suffix = bytes(stream.ToArray()), '.png'
+                    finally:
+                        stream.Dispose()
+                        image.Dispose()
+                else:
+                    result.update(ok=True, text=str(Clipboard.GetText()))
+                    return
+                if not self.store.current_path:
+                    result.update(ok=False, needs_save=True, error='请先保存文档，再粘贴图片。')
+                    return
+                result.update(ok=True, markdown=import_image(self.store.current_path, data, suffix))
+            except (OSError, EditorError) as exc:
+                result.update(ok=False, error=str(exc))
+            except Exception as exc:
+                result.update(ok=False, error=f'读取剪贴板失败：{exc}')
+            finally:
+                ctypes.windll.ole32.CoUninitialize()
+        worker = Thread(target=read)
+        worker.start()
+        worker.join()
+        return result
 
     def save(self, content: str) -> dict:
         try:

@@ -120,6 +120,7 @@
     <button id="openBtn">打开</button>
     <button id="saveBtn" class="primary">保存</button>
     <button id="saveAsBtn">另存为</button>
+    <button id="imageBtn">插入图片</button>
     <button id="registerBtn">注册到 Windows</button>
     <button id="unregisterBtn">取消注册</button>
     <div class="separator"></div>
@@ -493,6 +494,43 @@
   });
 
   let renderTimer = null;
+  let imageBusy = false;
+  async function insertImage(fromClipboard = false) {
+    if (editor.readOnly || imageBusy) return;
+    if (!fromClipboard && !window.appState.path) {
+      setMessage('请先保存文档，再插入图片。');
+      await saveFile();
+      if (!window.appState.path) return;
+    }
+    if (editorPane.hidden) { editorPane.hidden = false; refreshPanes(); }
+    const start = editor.selectionStart, end = editor.selectionEnd;
+    const original = editor.value;
+    const originalPath = window.appState.path;
+    imageBusy = true;
+    try {
+      const result = await window.pywebview.api[fromClipboard ? 'paste_clipboard' : 'insert_image']();
+      if (result.cancelled) return;
+      if (result.needs_save) {
+        setMessage(result.error);
+        await saveFile();
+        if (window.appState.path) setMessage('文档已保存，请再次粘贴图片。');
+        return;
+      }
+      if (!result.ok) { setMessage(result.error, true); return; }
+      if (original !== editor.value || originalPath !== window.appState.path) { setMessage('文档已变化，请重新插入。'); return; }
+      editor.focus();
+      editor.setSelectionRange(start, end);
+      document.execCommand('insertText', false, result.markdown || result.text || '');
+    } finally { imageBusy = false; }
+  }
+  document.getElementById('imageBtn').addEventListener('click', () => insertImage());
+  editor.addEventListener('keydown', event => {
+    if ((event.ctrlKey && !event.altKey && event.key.toLowerCase() === 'v') || (event.shiftKey && event.key === 'Insert')) {
+      if (event.isComposing || editor.readOnly) return;
+      event.preventDefault();
+      void insertImage(true);
+    }
+  });
   editor.addEventListener('input', () => {
     const wasDirty = window.appState.dirty;
     window.appState.dirty = editor.value !== window.appState.lastSavedContent;

@@ -1,5 +1,7 @@
 # Current UI foundation
 
+Image insertion: DocumentStore.current_path owns the destination. Selected images and clipboard file/image data are copied to `<document stem>.assets/` with generated names and URL-encoded relative Markdown references. PNG/JPEG/GIF/WebP/BMP only; 12 MB follows the existing local-preview limit. Clipboard images become PNG. Unsaved documents must be saved first. Undo removes the reference only; no automatic asset deletion or Save As asset relocation. Windows clipboard access uses the existing pythonnet/WinForms runtime in an STA worker.
+
 Released product: local Markdown reading and focused editing. DocumentStore owns document identity, encoding and save lifecycle; the existing Python bridge remains unchanged.
 
 Editor text is the current editable content. Preview, heading outline and search results are projections. Syntax examples are static, read-only help and never replace the current document.

@@ -6,6 +6,7 @@ import mimetypes
 import os
 import stat
 import tempfile
+from uuid import uuid4
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import unquote, urlparse
@@ -14,6 +15,22 @@ import mistune
 
 UTF8_BOM = b"\xef\xbb\xbf"
 MAX_INLINE_IMAGE_BYTES = 12 * 1024 * 1024
+IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.webp', '.bmp'}
+
+def import_image(document: Path | None, data: bytes, suffix: str) -> str:
+    if document is None:
+        raise EditorError('请先保存文档，再插入图片。')
+    if suffix.lower() not in IMAGE_EXTENSIONS:
+        raise EditorError('仅支持 PNG、JPEG、GIF、WebP、BMP 图片。')
+    if len(data) > MAX_INLINE_IMAGE_BYTES:
+        raise EditorError('图片不能超过 12 MB（当前预览上限）。')
+    folder = document.parent / (document.stem + '.assets')
+    folder.mkdir(exist_ok=True)
+    target = folder / ('image-' + uuid4().hex[:12] + suffix.lower())
+    with target.open('xb') as stream:
+        stream.write(data)
+    from urllib.parse import quote
+    return f'![图片]({quote(target.relative_to(document.parent).as_posix())})'
 
 class EditorError(RuntimeError):
     """A user-facing editor error."""
