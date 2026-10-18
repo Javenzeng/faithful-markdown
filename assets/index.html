@@ -112,6 +112,19 @@
     #dirtyIndicator.dirty { color: #b45309; font-weight: 600; }
     #message { margin-left: auto; color: var(--muted); }
     #message.error { color: var(--danger); }
+    @media print {
+      @page { margin: 16mm; }
+      html, body { height: auto; overflow: visible; background: white; }
+      #app, #content { display: block; height: auto; overflow: visible; }
+      #toolbar, #findbar, #statusbar, #editorPane, #outline, #syntaxPane, .splitter { display: none !important; }
+      #previewPane, #previewPane[hidden] { display: block !important; overflow: visible; }
+      #preview { max-width: none; padding: 0; font-size: 11pt; }
+      #preview h1, #preview h2, #preview h3, #preview h4, #preview h5, #preview h6 { break-after: avoid; }
+      #preview img, #preview tr { break-inside: avoid; }
+      #preview pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+      #preview table { display: table; }
+      #preview mark, #preview mark.current { background: transparent; }
+    }
   </style>
 </head>
 <body>
@@ -121,6 +134,7 @@
     <button id="saveBtn" class="primary">保存</button>
     <button id="saveAsBtn">另存为</button>
     <button id="imageBtn">插入图片</button>
+    <button id="printBtn">打印／另存为 PDF</button>
     <button id="registerBtn">注册到 Windows</button>
     <button id="unregisterBtn">取消注册</button>
     <div class="separator"></div>
@@ -524,6 +538,21 @@
     } finally { imageBusy = false; }
   }
   document.getElementById('imageBtn').addEventListener('click', () => insertImage());
+  document.getElementById('printBtn').addEventListener('click', async () => {
+    const button = document.getElementById('printBtn');
+    button.disabled = true;
+    try {
+      const result = await window.pywebview.api.render(editor.value);
+      if (!result.ok) { setMessage(result.error || '无法生成打印内容', true); return; }
+      ++window.appState.renderToken;
+      clearTimeout(renderTimer);
+      preview.innerHTML = result.html;
+      wirePreviewLinks();
+      buildOutline();
+      await Promise.all(Array.from(preview.querySelectorAll('img'), image => image.decode().catch(() => {})));
+      window.print();
+    } finally { button.disabled = false; }
+  });
   editor.addEventListener('keydown', event => {
     if ((event.ctrlKey && !event.altKey && event.key.toLowerCase() === 'v') || (event.shiftKey && event.key === 'Insert')) {
       if (event.isComposing || editor.readOnly) return;

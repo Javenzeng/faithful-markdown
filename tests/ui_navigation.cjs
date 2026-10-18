@@ -6,7 +6,7 @@ const path = require('node:path');
   const browser = await chromium.launch({ channel: 'msedge', headless: true });
   const page = await browser.newPage({ viewport: { width: 1220, height: 780 } });
   const errors = [];
-  page.on('pageerror', error => errors.push(error.message));
+  page.on('pageerror', error => { errors.push(error.message); console.error(error.message); });
   await page.goto('file:///' + path.resolve(__dirname, '../assets/index.html').replaceAll('\\', '/'));
   await page.evaluate(() => {
     window.pywebview = { api: {
@@ -110,6 +110,16 @@ const path = require('node:path');
   await page.waitForFunction(() => editor.value.includes('普通粘贴'));
   assert.equal(await page.locator('#editor').inputValue(), '原文普通粘贴');
   assert.deepEqual(errors, []);
+  await page.evaluate(() => { window.print = () => { window.printCalled = true; }; });
+  await page.locator('#printBtn').click();
+  await page.waitForFunction(() => window.printCalled);
+  await page.emulateMedia({ media: 'print' });
+  assert.equal(await page.locator('#toolbar').isVisible(), false);
+  assert.equal(await page.locator('#editorPane').isVisible(), false);
+  assert.equal(await page.locator('#syntaxPane').isVisible(), false);
+  assert.equal(await page.locator('#previewPane').isVisible(), true);
+  const pdf = await page.pdf();
+  assert.ok(pdf.length > 1000);
   await browser.close();
   console.log('PASS: search/count/wrap/scroll, reader highlights, splitter drag, outline jump, narrow layout, unchanged document');
 })().catch(error => { console.error(error); process.exitCode = 1; });

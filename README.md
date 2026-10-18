@@ -10,6 +10,8 @@ Core workflow: `Open -> Review -> Fix -> Save -> Close`
 
 ## Images
 
+Use 打印／另存为 PDF to print the current rendered document, including unsaved edits. Choose Microsoft Print to PDF / Save as PDF in the system print dialog. Only reading content is printed; layout uses default pagination with no custom export settings.
+
 Use 插入图片 or copy one image file / a screenshot and press Ctrl+V in the editor. Supported formats: PNG, JPEG, GIF, WebP, BMP, up to 12 MB per image. Screenshots are saved as PNG. Save an unnamed document first (after saving, paste the image again).
 
 Images are copied into `<document name>.assets` beside the Markdown file and referenced with relative paths. Move the Markdown file together with that folder. Undo removes the reference but retains the image file. Save As does not relocate existing image folders; move/copy them with the document when changing directories.
