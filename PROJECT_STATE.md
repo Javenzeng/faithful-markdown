@@ -7,12 +7,16 @@ Repository: `Javenzeng/faithful-markdown`
 Default branch: `main`
 Canonical source + durable governance: GitHub
 Accepted source baseline: **V2.1 — Content Fidelity Contract**
-Current milestone: **V2.10 — Human packaged image acceptance pending**
+Current milestone: **V2.11 — Human packaged print acceptance pending**
 V2.6 Direction: `APPROVED`
 V2.6 Execution: `ACCEPTED`
 Latest accepted release source commit: `5e1644d6a661c3a07f8c49787ae6fd1c1342402c`
 Latest accepted public release: `v2.7`
-Latest published release: `v2.10` (2026-10-16 Asia/Shanghai)
+Latest published release: `v2.11` (2026-10-18 Asia/Shanghai)
+V2.11 source: `2f69d52cdb92658183bac9c938b3f729ea04daff`
+V2.11 local EXE: `releases/v2.11/FaithfulMarkdown.exe`
+V2.11 SHA-256: `0F387B77972DC6C2E63C1B6E8288D57C0A6A1ECFBEA2C646135EA5CDD4017C08`
+V2.11: minimal print/PDF entry using current reading content and system print UI. Edge PDF generation and 31 Python tests PASS. Packaged dialog acceptance pending.
 V2.10 source: `7e4e27433e37bfd07d70c247b9ddcadb3aaa731f`
 V2.10 local EXE: `releases/v2.10/FaithfulMarkdown.exe`
 V2.10 SHA-256: `71ACF99666AD3F8DA0E1F5429E8B161D6A0723EB22644C3EFC5F3E27CB6AED0D`
