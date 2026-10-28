@@ -7,12 +7,16 @@ Repository: `Javenzeng/faithful-markdown`
 Default branch: `main`
 Canonical source + durable governance: GitHub
 Accepted source baseline: **V2.1 — Content Fidelity Contract**
-Current milestone: **V2.11 — Human packaged print acceptance pending**
+Current milestone: **V2.12 — compact toolbar, packaged Human testing pending**
 V2.6 Direction: `APPROVED`
 V2.6 Execution: `ACCEPTED`
 Latest accepted release source commit: `5e1644d6a661c3a07f8c49787ae6fd1c1342402c`
 Latest accepted public release: `v2.7`
-Latest published release: `v2.11` (2026-10-18 Asia/Shanghai)
+Latest published release: `v2.12` (2026-10-28 Asia/Shanghai)
+V2.12 source: `057f5176851c6155a86eca676b1c237c7627c1bc`
+V2.12 local EXE: `releases/v2.12/FaithfulMarkdown.exe`
+V2.12 SHA-256: `4799D844FFAFF167D466CB2D8C68948815FD6E7161ED33FF89A999F8013F525B`
+V2.12: existing actions grouped into File/View/Settings; Open/Save remain visible. Edge smoke and 31 Python tests PASS; packaged Human testing pending.
 V2.11 source: `2f69d52cdb92658183bac9c938b3f729ea04daff`
 V2.11 local EXE: `releases/v2.11/FaithfulMarkdown.exe`
 V2.11 SHA-256: `0F387B77972DC6C2E63C1B6E8288D57C0A6A1ECFBEA2C646135EA5CDD4017C08`
