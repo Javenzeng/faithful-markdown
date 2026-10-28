@@ -18,6 +18,8 @@ Images are copied into `<document name>.assets` beside the Markdown file and ref
 
 ## Document navigation
 
+The toolbar keeps Open and Save visible. File contains Save As, image insertion and Print/PDF; View contains pane toggles, outline, syntax help and Find; Settings contains Windows registration. Menus close on selection, outside click or Escape. Existing keyboard shortcuts remain available.
+
 - `Ctrl+F` opens case-insensitive text search. Enter / Shift+Enter or the arrow buttons move between matches; Escape closes search. Editing mode searches the Markdown source; reading mode searches rendered text within each text node.
 - Toggle 编辑, 阅读 and 语法 independently; at least editor or reading remains visible. Drag separators between visible panes to resize, or focus them and use Left / Right. Layout changes apply only to this window.
 - The 目录 button opens a heading outline to the right of reading; hiding reading hides the outline. The read-only syntax reference opens at the far right and never replaces the document.

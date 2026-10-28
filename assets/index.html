@@ -36,6 +36,17 @@
     button:hover { background: #f9fafb; }
     button.primary { background: var(--accent); border-color: var(--accent); color: white; }
     button.mode.active { background: var(--accent-soft); border-color: #bfdbfe; color: #1d4ed8; }
+    .menu { position: relative; }
+    .menu summary { padding: 7px 10px; cursor: pointer; list-style: none; border-radius: 6px; }
+    .menu summary::-webkit-details-marker { display: none; }
+    .menu[open] summary, .menu summary:hover { background: var(--accent-soft); }
+    .menuItems { position: absolute; top: calc(100% + 6px); left: 0; z-index: 10; width: 240px; padding: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 8px 24px #0002; }
+    .menuItems button { display: flex; align-items: center; width: 100%; border: 0; border-radius: 4px; text-align: left; padding: 8px 10px; }
+    .menuItems kbd { margin-left: auto; color: var(--muted); font: inherit; font-size: 12px; }
+    .menuItems hr { border: 0; border-top: 1px solid var(--line); margin: 5px 0; }
+    .menuItems .mode::before, #outlineBtn::before { content: ''; width: 20px; flex-shrink: 0; }
+    .menuItems .active::before, #outlineBtn[aria-expanded="true"]::before { content: '✓'; color: var(--accent); }
+    button:disabled { opacity: .45; cursor: default; }
     #app { display: flex; flex-direction: column; height: 100%; }
     [hidden] { display: none !important; }
     #toolbar { min-height: 52px; flex-wrap: wrap; }
@@ -130,19 +141,27 @@
 <body>
 <div id="app">
   <div id="toolbar">
+    <details class="menu"><summary>文件</summary><div class="menuItems">
+      <button id="saveAsBtn">另存为<kbd>Ctrl+Shift+S</kbd></button>
+      <button id="imageBtn">插入图片</button>
+      <hr>
+      <button id="printBtn">打印／另存为 PDF</button>
+    </div></details>
+    <details class="menu"><summary>视图</summary><div class="menuItems">
+      <button id="editModeBtn" class="mode active" aria-pressed="true">编辑区</button>
+      <button id="readerModeBtn" class="mode active" aria-pressed="true">阅读区</button>
+      <button id="outlineBtn" aria-expanded="false">目录</button>
+      <button id="syntaxBtn" class="mode" aria-pressed="false">语法参考</button>
+      <hr>
+      <button id="findBtn">查找文本<kbd>Ctrl+F</kbd></button>
+    </div></details>
+    <details class="menu"><summary>设置</summary><div class="menuItems">
+      <button id="registerBtn">注册到 Windows</button>
+      <button id="unregisterBtn">取消注册</button>
+    </div></details>
+    <div class="separator"></div>
     <button id="openBtn">打开</button>
     <button id="saveBtn" class="primary">保存</button>
-    <button id="saveAsBtn">另存为</button>
-    <button id="imageBtn">插入图片</button>
-    <button id="printBtn">打印／另存为 PDF</button>
-    <button id="registerBtn">注册到 Windows</button>
-    <button id="unregisterBtn">取消注册</button>
-    <div class="separator"></div>
-    <button id="editModeBtn" class="mode active" aria-pressed="true">编辑</button>
-    <button id="readerModeBtn" class="mode active" aria-pressed="true">阅读</button>
-    <button id="findBtn" title="Ctrl+F">查找</button>
-    <button id="outlineBtn" aria-expanded="false">目录</button>
-    <button id="syntaxBtn" class="mode" aria-pressed="false">语法</button>
     <div id="fileName" title="">未命名.md</div>
   </div>
 
@@ -179,6 +198,23 @@
 </div>
 
 <script>
+  const menus = [...document.querySelectorAll('.menu')];
+  function closeMenus() { menus.forEach(menu => { menu.open = false; }); }
+  menus.forEach(menu => {
+    menu.addEventListener('toggle', () => {
+      if (menu.open) menus.filter(other => other !== menu).forEach(other => { other.open = false; });
+    });
+    menu.addEventListener('click', event => {
+      if (event.target.closest('button')) closeMenus();
+    });
+  });
+  document.addEventListener('click', event => { if (!event.target.closest('.menu')) closeMenus(); });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      const openMenu = menus.find(menu => menu.open);
+      if (openMenu) { closeMenus(); openMenu.querySelector('summary').focus(); }
+    }
+  });
   const editor = document.getElementById('editor');
   const preview = document.getElementById('preview');
   const fileName = document.getElementById('fileName');
