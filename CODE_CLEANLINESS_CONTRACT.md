@@ -132,6 +132,7 @@ Canonical project root 只保留：
 - 产品源码
 - `assets/`
 - `tests/`
+- `docs/`（少量长期标准和经验）
 - `records/`
 - `releases/`
 
@@ -144,9 +145,9 @@ Canonical project root 只保留：
 - 临时日志
 - 自动生成且非构建输入的 `.spec`
 
-Accepted 二进制只进入 `releases/<version>/accepted/`，不得放在源码根目录，也不得被下一次构建自动覆盖。
+发布二进制保存在本机 `releases/<version>/`，公开资产进入 GitHub Releases，不进入 Git 历史；不得被下一次构建覆盖。
 
-当前 Windows 构建脚本仍会在同步项目目录创建 `.venv/build/dist/.spec`；这是已知 build-hygiene debt。下次打包前必须单独设计更干净的 ephemeral build path，但不得在未授权时顺手改构建逻辑。
+现有 build_windows.ps1 已使用临时隔离环境及 work/spec 目录，输出 dist/。复用此入口；本地开发 .venv/ 可保留，不因治理重复安装或重建。产物路径和版本只在当前状态及对应记录维护。
 
 ## 14. UI Discipline
 

@@ -2,7 +2,7 @@
 
 ## 1. Mission
 
-Markdown Reader & Editor 的长期目标不是成为功能最多的 Markdown 编辑器，而是成为一个用户可以放心对项目 Markdown 执行快速阅读与小范围修订的 Windows 工具。
+Faithful Markdown 服务于不想安装重型编辑器、需要方便阅读、小范围修订和分享一份 Markdown 的 Windows 用户。文件保真是信任基础，简单直接的交互是可感知价值；不以功能齐全为目标。
 
 核心表达：
 
@@ -37,7 +37,7 @@ V2.1 的 Fidelity Contract 主要针对 Markdown 内容及已声明的编码/BOM
 - symlink / junction 语义
 - 网络盘 / 同步盘的底层替换语义
 
-这些只有在真实测试与需求证据出现后，才进入 V2.2 及后续里程碑。
+这些只有在真实测试与需求证据出现后，才进入专项评估，不预设版本承诺。
 
 ## 3. Target Users
 
@@ -47,6 +47,7 @@ V2.1 的 Fidelity Contract 主要针对 Markdown 内容及已声明的编码/BOM
 - AI coding / agent workflow 用户
 - README / AGENTS / PROJECT_STATE / SESSION_STATE 等项目 Markdown 的维护者
 - 需要快速阅读并偶尔修订 Markdown 的 Windows 用户
+- 不熟悉语法、但需要阅读和修改已有 Markdown 的用户；用轻量语法参考辅助，不发展为教学平台
 
 本项目不是长篇写作平台，也不是知识管理工具。
 
@@ -65,7 +66,7 @@ V2.1 的 Fidelity Contract 主要针对 Markdown 内容及已声明的编码/BOM
 - 用最小完整实现解决，维护成本与预期使用收益相称。
 - 保持文件保真、操作明确和轻量本地使用。
 
-Human 按具体功能批准范围；一次批准不授权相邻功能或持续扩展。搜索、可调整分栏和当前文档标题目录属于已批准的阅读与校对增强；行号仍暂缓，不因本宪章升级自动进入开发。
+Human 按具体功能批准范围；一次批准不授权相邻功能或持续扩展。收到请求时先了解用户要完成什么、缺少它时如何处理；不按“竞品有”或需求数量自动排期。当前功能与暂缓项由 PROJECT_STATE.md / MILESTONES.md 维护，不在宪章堆版本历史。
 
 版本以用户完成核心任务的改善和工程质量为依据，不以功能数量为目标。验收关注用户是否更容易读懂、找到并修订问题，同时确认文件保真行为没有退化。
 
@@ -93,7 +94,7 @@ Human 按具体功能批准范围；一次批准不授权相邻功能或持续�
 ### 4.4 Small auditable codebase
 理想长期状态：
 - 运行时代码尽量少
-- 测试覆盖持续增加
+- 关键行为有与风险相称的验证
 - 重复逻辑持续减少
 - 错误路径持续删除
 - 任何复杂度都有真实故障或需求证据
@@ -125,7 +126,7 @@ Human 按具体功能批准范围；一次批准不授权相邻功能或持续�
 - WYSIWYG
 - Mermaid
 - LaTeX
-- PDF / Office 导出功能竞赛
+- Word / 多格式导出及复杂排版竞赛（已批准的系统打印／PDF 仅服务分享与打印，不建立导出引擎）
 - 复杂主题系统
 - legacy OS compatibility
 

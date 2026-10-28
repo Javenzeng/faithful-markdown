@@ -10,11 +10,13 @@ Core workflow: `Open -> Review -> Fix -> Save -> Close`
 
 ## Images
 
-Use 打印／另存为 PDF to print the current rendered document, including unsaved edits. Choose Microsoft Print to PDF / Save as PDF in the system print dialog. Only reading content is printed; layout uses default pagination with no custom export settings.
-
 Use 插入图片 or copy one image file / a screenshot and press Ctrl+V in the editor. Supported formats: PNG, JPEG, GIF, WebP, BMP, up to 12 MB per image. Screenshots are saved as PNG. Save an unnamed document first (after saving, paste the image again).
 
 Images are copied into `<document name>.assets` beside the Markdown file and referenced with relative paths. Move the Markdown file together with that folder. Undo removes the reference but retains the image file. Save As does not relocate existing image folders; move/copy them with the document when changing directories.
+
+## Sharing and printing
+
+File → 打印／另存为 PDF prints the current rendered document, including unsaved edits. Choose Microsoft Print to PDF / Save as PDF in the system print dialog. Only reading content prints; default pagination, no custom export settings. Packaged native printing acceptance is tracked in PROJECT_STATE.md.
 
 ## Document navigation
 
@@ -22,9 +24,9 @@ The toolbar keeps Open and Save visible. File contains Save As, image insertion 
 
 - `Ctrl+F` opens case-insensitive text search. Enter / Shift+Enter or the arrow buttons move between matches; Escape closes search. Editing mode searches the Markdown source; reading mode searches rendered text within each text node.
 - Toggle 编辑, 阅读 and 语法 independently; at least editor or reading remains visible. Drag separators between visible panes to resize, or focus them and use Left / Right. Layout changes apply only to this window.
-- The 目录 button opens a heading outline to the right of reading; hiding reading hides the outline. The read-only syntax reference opens at the far right and never replaces the document.
+- View → 目录 opens a heading outline to the right of reading; hiding reading hides the outline. The read-only syntax reference opens at the far right and never replaces the document.
 - At the end of a list item, Enter continues bullets, numbers or unchecked tasks while retaining indentation. Enter on an empty item ends it. Shift+Enter inserts a plain newline; fenced code and IME confirmation are not continued. Ctrl+Z undoes the insertion. Indent nested lists with four spaces; each level numbers independently.
-- These controls affect only the current window and do not change document content or save preferences.
+- Pane visibility/width and search affect only the current window. List continuation edits the document and can be undone; layout preferences are not persisted.
 
 Browser smoke check (requires an existing Playwright installation and Microsoft Edge): `node tests/ui_navigation.cjs`. It checks the UI with a stubbed Python bridge, not the packaged Windows application.
 
@@ -38,24 +40,16 @@ V2.1 centers on three rules:
 
 The UI also exposes concise File Facts and detects obvious Windows read-only state up front.
 
-## Current accepted baseline
+## Download and current status
 
-Current accepted source baseline: **V2.1 — Content Fidelity Contract**.
-
-Pre-Git evidence under `records/` includes:
-
-- source regression after the P0 fix: **24/24 PASS**
-- Human Windows real-machine acceptance: **H1-H7 PASS**
-- P0 cold-start retest: **5/5 PASS**
-
-These are pre-Git acceptance records, not GitHub CI results.
+Download the portable FaithfulMarkdown.exe from [GitHub Releases](https://github.com/Javenzeng/faithful-markdown/releases). Close the old program before replacing its EXE. Current version and verification limitations: PROJECT_STATE.md; historical acceptance: MILESTONES.md. Test/build success is not Human packaged acceptance.
 
 ## Run from source
 
 Target: Windows 10/11 x64, WebView2 Runtime, Python 3.10-3.13 x64.
 
 ```powershell
-py -3 -m venv .venv
+py -3.13 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe app.py
 ```

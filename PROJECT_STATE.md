@@ -1,177 +1,31 @@
-# PROJECT_STATE.md
+# Current state — 2026-10-28
 
-## Current Baseline
+## 版本与事实
 
-Project: Faithful Markdown
-Repository: `Javenzeng/faithful-markdown`
-Default branch: `main`
-Canonical source + durable governance: GitHub
-Accepted source baseline: **V2.1 — Content Fidelity Contract**
-Current milestone: **V2.12 — compact toolbar, packaged Human testing pending**
-V2.6 Direction: `APPROVED`
-V2.6 Execution: `ACCEPTED`
-Latest accepted release source commit: `5e1644d6a661c3a07f8c49787ae6fd1c1342402c`
-Latest accepted public release: `v2.7`
-Latest published release: `v2.12` (2026-10-28 Asia/Shanghai)
-V2.12 source: `057f5176851c6155a86eca676b1c237c7627c1bc`
-V2.12 local EXE: `releases/v2.12/FaithfulMarkdown.exe`
-V2.12 SHA-256: `4799D844FFAFF167D466CB2D8C68948815FD6E7161ED33FF89A999F8013F525B`
-V2.12: existing actions grouped into File/View/Settings; Open/Save remain visible. Edge smoke and 31 Python tests PASS; packaged Human testing pending.
-V2.11 source: `2f69d52cdb92658183bac9c938b3f729ea04daff`
-V2.11 local EXE: `releases/v2.11/FaithfulMarkdown.exe`
-V2.11 SHA-256: `0F387B77972DC6C2E63C1B6E8288D57C0A6A1ECFBEA2C646135EA5CDD4017C08`
-V2.11: minimal print/PDF entry using current reading content and system print UI. Edge PDF generation and 31 Python tests PASS. Packaged dialog acceptance pending.
-V2.10 source: `7e4e27433e37bfd07d70c247b9ddcadb3aaa731f`
-V2.10 local EXE: `releases/v2.10/FaithfulMarkdown.exe`
-V2.10 SHA-256: `71ACF99666AD3F8DA0E1F5429E8B161D6A0723EB22644C3EFC5F3E27CB6AED0D`
-V2.10: local image selection and clipboard image/file paste; document-name.assets and relative references. 31 Python tests and Edge smoke PASS; actual native clipboard image import/preview PASS. Packaged UI and Explorer copy/paste Human acceptance pending.
-V2.9.1 source: `bbdcf30788af0ddaece8a9921317c000de967769`
-V2.9.1 local EXE: `releases/v2.9.1/FaithfulMarkdown.exe`
-V2.9.1 SHA-256: `FA9DDF2EEAE27AB0A9665C83F76765109571DF1CFCC15CC64C03F9EF6C10C2A2`
-V2.9.1: reset caret and editor/preview scroll on document load only; Edge regression and Python tests PASS. Human packaged acceptance pending.
-V2.9 source: `4dff78e44b2764aa4b5e49b1391e6a0e4822b631`
-V2.9 local EXE: `releases/v2.9/FaithfulMarkdown.exe`
-V2.9 SHA-256: `259249179A6D46FA72EB8F1BDFAC33B0CCD3A73C709A879692486852912050EF`
-V2.9 scope: independent pane toggles/resizing, rightmost read-only syntax reference, automatic list continuation. Edge UI smoke and Python regression PASS; Human packaged acceptance pending. Evidence: `records/UI_SYNTAX_LISTS_2026-10-09.md`.
-Latest correction: `v2.8.1` — heading outline moved to the right of the reading pane.
-V2.8.1 source commit: `291a8609633c1e7eb7183eee634a6e1e6e928f99`
-V2.8.1 local EXE: `releases/v2.8.1/FaithfulMarkdown.exe`
-V2.8.1 SHA-256: `C5ADB45F68E80B8BB10EE43E06363736D986E42BD041008DB238AD8F238CC8C9`
-V2.8 source commit: `00081fa3f34b4cae6ea680ecbd920d5d96bfb43c`
-V2.8 local EXE: `releases/v2.8/FaithfulMarkdown.exe`
-V2.8 SHA-256: `0348339A7854DB0F9A28B8504A599393D1BF83ED7853E0DFA609D9E0D437D288`
-Artifact: `FaithfulMarkdown.exe`
-Artifact SHA-256: `9846C856267D15EB350211BB1B0AE2640322430AE0E61640DAEDB8F0829D044E`
-Current owner: Human
-Baton: `HUMAN`
-Blocker: `None`
-Packaging: `COMPLETED`
+- 产品：Faithful Markdown；RELEASED；GitHub Javenzeng/faithful-markdown，main。
+- 最新发布：v2.12，https://github.com/Javenzeng/faithful-markdown/releases/tag/v2.12 。
+- 发布源码：057f5176851c6155a86eca676b1c237c7627c1bc；后续治理提交不改变该产物。
+- 本地 EXE：D:\Projects\faithful-markdown\releases\v2.12\FaithfulMarkdown.exe（仅此工作机路径；其他环境从 Release 下载）。
+- 产物：13,345,708 bytes；SHA-256 4799D844FFAFF167D466CB2D8C68948815FD6E7161ED33FF89A999F8013F525B；发布时已核对远端资产。
+- 最新验证：31 项 Python 测试、模拟 bridge 的 Edge UI smoke、隔离构建通过；不是 GitHub CI 或 Human 打包版验收。
+- v2.12 将已有操作收进文件/视图/设置，仅打开/保存常驻；无新增运行时依赖。
 
-## Last Accepted Fact
+## 当前方向与授权
 
-2026-08-30：V2.7 Windows App Identity **ACCEPTED**。
+稳定使用 v2.12，等待测试人员的实际反馈，不主动增加功能或重写架构。Human 已同意“方便阅读、修改和分享一份 Markdown”的方向；功能需求须逐项评估，不因无 bug 或有人提出就自动开发。
 
-Faithful Markdown identity completed；canonical build 29/29 PASS；packaged Windows evidence PASS；Register / default-app guard / unregister success PASS；GitHub Release `v2.7` published and remotely hash-verified。accepted source baseline remains V2.1 — Content Fidelity Contract。V2.5 remains `DEFER / NOT_ACTIVATED`；V3 remains `CONDITIONAL / NOT_STARTED`。
+本阶段授权：整理过期治理、精简入口与路由、同步 GitHub。无新的功能/打包授权。治理完成后 Owner/Baton 回到 Human，下一项工作等待具体反馈和授权。
 
-2026-08-30：V2.6 — Reproducible Release **ACCEPTED**。
+## 验收边界与待观察项
 
-GitHub Release `v2.6` published from source commit `cb6c3a62f5cf8eeb2ec21d1530123cd18f4bc4a6`；EXE SHA-256 为 `F2E15FC962B2765F7957349593045B907BD0F2AE35E3E772956DD9E8BCF74605`。29/29 tests、packaged cold start、icon、Human Smoke 与远端 artifact hash verification 均 PASS。V2.5 remains `DEFER / NOT_ACTIVATED`；V3 remains `CONDITIONAL / NOT_STARTED`。
+- 历史明确 Human 验收：V2.1 内容保真、v2.7 Windows identity；见 MILESTONES 路由。
+- Human 曾报告个人使用 v2.9 没问题；不是全部后续版本的完整验收。聊天暂无 bug 报告，不等于零缺陷证明。
+- v2.10 实际原生剪贴板图片保存/预览通过；打包版图片选择、Explorer 文件粘贴仍未记录完整 Human 验收。
+- v2.11 浏览器 PDF 生成通过；打包版原生打印窗口仍未记录 Human 验收。
+- v2.12 菜单打包版等待测试人员反馈。不得因此启动泛化测试工程。
+- EXE 未付费签名；旧 Defender 误报申请已被 Human 取消，不自行恢复提交。
+- V2.5 大文件专项暂缓；V3 重写无授权；行号、Word 和多格式导出无授权。
 
-无真实大文件缺陷、性能、hang 或 crash 证据；long-single-line DEFER。benchmark +0，test +0，runtime +0，dependency +0，state +0，abstraction +0。V2.5 remains `CONDITIONAL / NOT_STARTED`，source authorization remains `NOT_GRANTED`。V2.5 was not executed or accepted；仅在未来真实证据触发时重新评估。accepted source baseline 仍为 V2.1 — Content Fidelity Contract。
+## 接手下一步
 
-After this accepted public push:
-- GitHub = canonical source + durable governance + Git history.
-- Drive Relay = `SESSION_STATE.md`, Baton / short-lived coordination, archival evidence mirror.
-- public binaries belong in GitHub Releases, not Git history.
-
-Acceptance / capability evidence:
-- `records/GitHub/GITHUB_INITIAL_IMPORT_ACCEPTANCE_AND_CAPABILITY_PROBE_2026-08-30.md`
-
-## GitHub Capability Probe
-
-Status: **PASS**
-
-2026-08-30 已完成两层验证：
-
-1. 当前 Manager session 能确认 authenticated GitHub account `Javenzeng`，并直接访问 `Javenzeng/faithful-markdown`。
-2. Human 在一个全新 ChatGPT session 中只提供 repository identity 与 Capability Probe 指令；该 session 无聊天历史仍成功：
-   - 识别 authenticated account `Javenzeng`
-   - 直接读取 repository / default branch
-   - 读取 `AGENTS.md` / `PROJECT_STATE.md` / `MILESTONES.md`
-   - 恢复 accepted V2.1 baseline / Baton / packaging state
-   - 主动发现旧 `PROJECT_STATE.md` 与真实 GitHub 状态的 drift
-   - 保持只读并停在 Human Gate
-
-治理结论：
-
-> **GitHub access is a capability to verify, not an assumption.**
-
-新的 Manager / Reviewer session 应先执行 GitHub Capability Probe；Probe 成功则直接从 GitHub canonical repository 接手，失败才转 Drive Relay。
-
-## Manager / Reviewer Governance Upgrade
-
-Status: **ENABLED**
-
-Human 于 2026-08-30 授权完成治理升级。
-
-角色：
-- Human：最终 scope / milestone / release / destructive change / execution authority。
-- Manager / Reviewer：主控、GitHub canonical reader、Gate designer、结果审核员；默认不改业务源码。
-- Sol：架构与授权范围内的主要 implementation。
-- Codex：local Git / Windows factual execution、tests、build、package。
-- Drive Relay：Baton / `SESSION_STATE.md` / short-lived coordination。
-
-默认 Gate flow：
-
-`HUMAN -> MANAGER -> SOL -> MANAGER -> CODEX -> MANAGER -> HUMAN`
-
-## Accepted V2 Artifact
-
-Canonical archival path:
-
-`releases/V2/accepted/Markdown_Reader_Editor.exe`
-
-Recorded SHA-256:
-
-`E706126BA63F9FD7486430EF1227721FBB58A0725CF53497573CC9FADAECBF1E`
-
-该产物是 V2 accepted Windows baseline，不因后续开发或打包自动覆盖；public Git history 不包含该 EXE。
-
-## V2.1 Accepted Source Baseline
-
-V2.1 Execution: `ACCEPTED`
-Windows Real-Machine Acceptance: `PASS`
-P0 Cold Start/API Exposure Fix: `ACCEPTED`
-
-Accepted scope:
-1. No-op Save
-2. External Change Guard
-3. Minimal Safe Save
-4. Read-only Upfront
-5. File Facts
-6. Fidelity Test Corpus
-
-Final source test evidence:
-- baseline 8/8 PASS
-- fidelity 13/13 PASS
-- P0 regression 3/3 PASS
-- total 24/24 PASS
-
-Human Windows acceptance:
-- H1 Cold Start 5/5 PASS
-- H2 File Facts + Edit/Save PASS
-- H3 No-op Save PASS
-- H4 External Change Guard PASS
-- H5 Windows Read-only + Save As PASS
-- H6 UTF-8 BOM + CRLF PASS
-- H7 Dirty Close PASS
-
-Evidence:
-- `records/V2.1/V2_1_HUMAN_WINDOWS_ACCEPTANCE_2026-08-29.md`
-- `records/V2.1/V2_1_IMPLEMENTATION_RECORD_2026-08-29.md`
-- `records/V2.1/V2_1_P0_COLD_START_FIX_2026-08-29.md`
-
-## Active Decisions
-
-- 产品长期定位以 `PROJECT_CHARTER.md` 为唯一权威来源。
-- Single Writer Baton Rule 生效。
-- GitHub 已是 canonical source + durable governance + Git history。
-- Drive Relay 不再作为 canonical Git source；仍是 active coordination / session state / archival plane。
-- Agent/session 不得假设 GitHub connector 一定可用，必须 Probe。
-- Manager / Reviewer 默认不改业务源码。
-- Windows runtime / filesystem facts 仍必须由 Human / Codex 本地验证。
-- public Git history 不存放二进制。
-
-## Current Authorization Boundary
-
-Human authorized document search, a draggable divider, a collapsible heading outline, Windows packaging, and GitHub synchronization/publication. Implementation, Edge browser smoke, Python regression suite, build, and v2.8 Release publication completed. GitHub asset digest matches the build. Packaged Human feature acceptance remains pending. Evidence: `records/UI_NAVIGATION_2026-10-09.md`.
-
-V2.7 is accepted and released. Future changes require a new Human authorization。
-
-V2.5 remains `DEFER / NOT_ACTIVATED`。V3 remains `CONDITIONAL / NOT_STARTED`。Future source changes require a new Human authorization based on real evidence。
-
-## Next Gate
-
-Human tests the v2.8 EXE's search, divider, and outline. V2.5 and V3 remain unchanged.
-
-Baton: `HUMAN`
+先按 AGENTS 恢复状态并简短报告；有具体 issue 时只读取对应模块和证据。没有新任务时保持现状。每阶段结束覆盖更新本文件，不累积旧“下一步”。
