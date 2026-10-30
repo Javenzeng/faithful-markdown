@@ -12,7 +12,7 @@
 ## 新 session：最小读取
 
 1. 读本文件与 PROJECT_STATE.md，恢复当前版本、授权与下一步；不默认扫描全部历史。
-2. 确认 checkout 的 remote、branch、工作区。GitHub Javenzeng/faithful-markdown 的 main 是源码和持久治理权威；本机常用 checkout 为 D:\Projects\faithful-markdown。Drive 同名目录是旧协调/归档面，不合并成第二套源码。
+2. 确认 checkout 的 remote、branch、工作区。GitHub Javenzeng/faithful-markdown 的 main 是源码和持久治理权威；本机常用 checkout 为 D:\Projects\faithful-markdown。旧 Drive 目录文件已归并清理；独有历史资料仅存本机 records/local-history/，不是源码或当前指令入口。
 3. 写任务前核对远端；干净工作区可 git pull --ff-only，冲突或无法安全同步时报告，不覆盖本地改动。远端不可用时说明限制，不把历史访问成功当作当前证明。
 4. 仅按任务读取下一节所需文档。输出被截断时按章节补读，不凭截断内容下结论。
 
